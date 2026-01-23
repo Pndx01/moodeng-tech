@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/tracker.css">
+    <title>Service Tracker</title>
+</head>
+<body>
+    <header>
+        <!-- Include header component -->
+        <div id="header-placeholder"></div>
+    </header>
+
+    <main>
+        <h1>Service Tracker</h1>
+        <div class="tracker">
+            <div class="stage" id="received">
+                <h2>Received</h2>
+                <p>Your laptop has been received and is awaiting diagnosis.</p>
+                <button onclick="updateStatus('diagnosed')">Update to Diagnosed</button>
+            </div>
+            <div class="stage" id="diagnosed">
+                <h2>Diagnosed</h2>
+                <p>Your laptop has been diagnosed. Parts may be ordered.</p>
+                <button onclick="updateStatus('parts-ordered')">Update to Parts Ordered</button>
+            </div>
+            <div class="stage" id="parts-ordered">
+                <h2>Parts Ordered</h2>
+                <p>Parts have been ordered and are on the way.</p>
+                <button onclick="updateStatus('repair-in-progress')">Update to Repair In Progress</button>
+            </div>
+            <div class="stage" id="repair-in-progress">
+                <h2>Repair In Progress</h2>
+                <p>Your laptop is currently being repaired.</p>
+                <button onclick="updateStatus('ready-for-pickup')">Update to Ready for Pickup</button>
+            </div>
+            <div class="stage" id="ready-for-pickup">
+                <h2>Ready for Pickup</h2>
+                <p>Your laptop is ready for pickup!</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Include footer component -->
+        <div id="footer-placeholder"></div>
+    </footer>
+
+    <script src="js/tracker.js"></script>
+</body>
+</html>

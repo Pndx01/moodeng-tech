@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.tracker-container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.tracker-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.tracker-stage {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tracker-stage:last-child {
+    border-bottom: none;
+}
+
+.stage-label {
+    font-weight: bold;
+}
+
+.stage-status {
+    color: #888;
+}
+
+.stage-completed {
+    color: green;
+    font-weight: bold;
+}
+
+.stage-pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.stage-not-started {
+    color: red;
+    font-weight: bold;
+}
+
+.update-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.update-button:hover {
+    background-color: #0056b3;
+}

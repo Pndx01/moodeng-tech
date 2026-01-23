@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View All Tickets - Moodeng Tech</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <section class="dashboard-hero">
+        <div class="container">
+            <h1>All Repair Tickets</h1>
+            <p>Manage and view all repair tickets</p>
+        </div>
+    </section>
+
+    <section class="dashboard-content">
+        <div class="container">
+            <!-- Filter Options -->
+            <div class="dashboard-card">
+                <h2>Filter Tickets</h2>
+                <div class="filter-options">
+                    <button class="btn btn-secondary filter-btn active" data-status="all">All Tickets</button>
+                    <button class="btn btn-secondary filter-btn" data-status="received">Received</button>
+                    <button class="btn btn-secondary filter-btn" data-status="diagnosed">Diagnosed</button>
+                    <button class="btn btn-secondary filter-btn" data-status="parts-ordered">Parts Ordered</button>
+                    <button class="btn btn-secondary filter-btn" data-status="repair-progress">In Progress</button>
+                    <button class="btn btn-secondary filter-btn" data-status="ready">Ready</button>
+                </div>
+            </div>
+
+            <!-- Tickets List -->
+            <div class="dashboard-card full-width">
+                <h2>Tickets</h2>
+                <div id="allTicketsContainer">
+                    <p class="loading">Loading tickets...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/ticket.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        // Load header and footer
+        fetch('components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+                updateHeaderForAuth();
+            });
+
+        fetch('components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-container').innerHTML = data);
+
+        // Check authentication on page load
+        checkAuthentication();
+
+        // Load all tickets
+        loadAllTickets();
+
+        // Filter functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('filter-btn')) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                const status = e.target.dataset.status;
+                filterTickets(status);
+            }
+        });
+
+        function loadAllTickets(filter = 'all') {
+            const tickets = getAllTickets();
+            const container = document.getElementById('allTicketsContainer');
+            
+            if (!container) return;
+
+            let filteredTickets = tickets;
+            if (filter !== 'all') {
+                filteredTickets = tickets.filter(t => t.status === filter);
+            }
+
+            if (filteredTickets.length === 0) {
+                container.innerHTML = `
+                    <div class="no-tickets">
+                        <p>No tickets found${filter !== 'all' ? ' with this status' : ''}.</p>
+                        <a href="create-ticket.html" class="btn btn-primary">Create New Ticket</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by creation date (newest first)
+            filteredTickets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            let html = '<div class="tickets-list">';
+            
+            filteredTickets.forEach(ticket => {
+                const statusClass = ticket.status.replace(/ /g, '-');
+                const statusText = formatStatus(ticket.status);
+                
+                html += `
+                    <div class="ticket-item">
+                        <div class="ticket-id" style="cursor: pointer;" onclick="viewTicketDetails('${ticket.id}')">${ticket.id}</div>
+                        <div class="ticket-info">
+                            <h4>${ticket.firstName} ${ticket.lastName}</h4>
+                            <p><strong>Device:</strong> ${ticket.laptopModel} (S/N: ${ticket.serialNumber})</p>
+                            <p><strong>Issue:</strong> ${ticket.issue.substring(0, 80)}${ticket.issue.length > 80 ? '...' : ''}</p>
+                            <p><strong>Priority:</strong> ${ticket.priority.toUpperCase()} | <strong>Created:</strong> ${formatDate(ticket.createdAt)}</p>
+                            <p><strong>Contact:</strong> ${ticket.phone} | ${ticket.email}</p>
+                        </div>
+                        <div>
+                            <div class="ticket-status ${statusClass}">${statusText}</div>
+                            <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-direction: column;">
+                                <button onclick="updateStatus('${ticket.id}')" class="btn btn-primary" style="font-size: 0.85rem; padding: 0.5rem;">Update Status</button>
+                                <button onclick="viewOnTracker('${ticket.id}')" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.5rem;">View Tracker</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function filterTickets(status) {
+            loadAllTickets(status);
+        }
+
+        function viewTicketDetails(ticketId) {
+            alert(`Ticket Details for ${ticketId}\n\nClick "View Tracker" to see full details on the tracker page.`);
+        }
+
+        function viewOnTracker(ticketId) {
+            window.location.href = `tracker.html?id=${ticketId}`;
+        }
+
+        function updateStatus(ticketId) {
+            const newStatus = prompt('Enter new status:\n- received\n- diagnosed\n- parts-ordered\n- repair-progress\n- ready');
+            
+            if (newStatus) {
+                const validStatuses = ['received', 'diagnosed', 'parts-ordered', 'repair-progress', 'ready'];
+                if (validStatuses.includes(newStatus)) {
+                    const message = prompt('Enter update message (optional):') || `Status updated to ${newStatus}`;
+                    updateTicketStatus(ticketId, newStatus, message);
+                    showNotification('Ticket status updated!', 'success');
+                    loadAllTickets();
+                } else {
+                    showNotification('Invalid status!', 'error');
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .filter-options {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active {
+            background-color: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+    </style>
+</body>
+</html>

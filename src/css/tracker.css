@@ -1,0 +1,498 @@
+/* ============================================================================
+   TRACKER PAGE SPECIFIC STYLES
+   ============================================================================ */
+
+/* ============================================================================
+   TRACKER INPUT SECTION
+   ============================================================================ */
+.tracker-input-section {
+    padding: 4rem 0;
+    background-color: #f9fafb;
+}
+
+.tracker-form {
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.tracker-form h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #1f2937;
+}
+
+#trackingForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+}
+
+.form-group input {
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+#trackingForm button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#trackingForm button:hover {
+    background-color: #1e40af;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.tracker-info {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+/* ============================================================================
+   SAMPLE REPAIRS SECTION
+   ============================================================================ */
+.sample-repairs {
+    padding: 4rem 0;
+}
+
+.sample-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.sample-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    border-top: 4px solid #2563eb;
+}
+
+.sample-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-color: #2563eb;
+}
+
+.sample-card h4 {
+    color: #2563eb;
+    margin-bottom: 0.5rem;
+}
+
+.sample-card p {
+    color: #6b7280;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.status {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background-color: #dbeafe;
+    color: #1e40af;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ============================================================================
+   TRACKER RESULTS SECTION
+   ============================================================================ */
+.tracker-results {
+    padding: 4rem 0;
+    background-color: #f9fafb;
+}
+
+.result-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.result-header h2 {
+    text-align: left;
+    margin: 0;
+    color: #1f2937;
+    flex: 1;
+}
+
+.result-header .btn {
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+.repair-details {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background-color: #f9fafb;
+    border-radius: 8px;
+}
+
+.detail-item {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.detail-item label {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+.detail-item span {
+    color: #1f2937;
+}
+
+/* ============================================================================
+   TIMELINE STYLES
+   ============================================================================ */
+.timeline {
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+}
+
+.timeline h3 {
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.timeline-stages {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.timeline-stage {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    position: relative;
+}
+
+.timeline-stage-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 auto 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    transition: all 0.3s ease;
+    border: 3px solid white;
+}
+
+.timeline-stage.completed .timeline-stage-dot {
+    background-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.timeline-stage.active .timeline-stage-dot {
+    background-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    animation: pulse 2s infinite;
+}
+
+.timeline-stage.pending .timeline-stage-dot {
+    background-color: #9ca3af;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.1);
+    }
+}
+
+.timeline-stage-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.timeline-stage-date {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.timeline-arrow {
+    color: #2563eb;
+    font-size: 1.5rem;
+    margin: 0 -0.25rem;
+    flex: 0 0 auto;
+}
+
+@media (max-width: 768px) {
+    .timeline-stages {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .timeline-arrow {
+        transform: rotate(90deg);
+    }
+
+    .detail-item {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+    }
+}
+
+/* ============================================================================
+   CURRENT STATUS SECTION
+   ============================================================================ */
+.current-status {
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+}
+
+.current-status h3 {
+    color: #1f2937;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.status-box {
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.status-box.status-received {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border-left: 5px solid #2563eb;
+}
+
+.status-box.status-diagnosed {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border-left: 5px solid #2563eb;
+}
+
+.status-box.status-parts-ordered {
+    background-color: #fef3c7;
+    color: #92400e;
+    border-left: 5px solid #f59e0b;
+}
+
+.status-box.status-repair-progress {
+    background-color: #fef3c7;
+    color: #92400e;
+    border-left: 5px solid #f59e0b;
+}
+
+.status-box.status-ready {
+    background-color: #dcfce7;
+    color: #166534;
+    border-left: 5px solid #10b981;
+}
+
+/* ============================================================================
+   NOTIFICATIONS PREFERENCES
+   ============================================================================ */
+.notifications {
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+}
+
+.notifications h3 {
+    color: #1f2937;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.notifications p {
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+/* ============================================================================
+   REPAIR HISTORY
+   ============================================================================ */
+.repair-history {
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+}
+
+.repair-history h3 {
+    color: #1f2937;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.history-log {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.history-entry {
+    padding: 1rem;
+    border-left: 3px solid #2563eb;
+    background-color: #f9fafb;
+    border-radius: 4px;
+}
+
+.history-entry-time {
+    font-weight: 600;
+    color: #2563eb;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.history-entry-message {
+    color: #1f2937;
+    font-size: 0.95rem;
+}
+
+.history-entry-status {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+@media (max-width: 768px) {
+    .tracker-form,
+    .result-card {
+        padding: 2rem 1rem;
+    }
+
+    .result-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .result-header .btn {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .sample-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .timeline-stage-dot {
+        width: 35px;
+        height: 35px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tracker-form,
+    .result-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .tracker-form h2,
+    .timeline h3,
+    .current-status h3,
+    .notifications h3,
+    .repair-history h3 {
+        font-size: 1rem;
+    }
+
+    .detail-item {
+        font-size: 0.9rem;
+    }
+
+    .timeline-stage-label {
+        font-size: 0.75rem;
+    }
+
+    .status-box {
+        font-size: 0.95rem;
+    }
+}

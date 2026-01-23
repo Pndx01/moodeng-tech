@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Moodeng Tech</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <section class="dashboard-hero">
+        <div class="container">
+            <h1>Dashboard</h1>
+            <p id="welcomeMessage">Welcome back!</p>
+        </div>
+    </section>
+
+    <section class="dashboard-content">
+        <div class="container">
+            <div class="dashboard-grid">
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <h2>Quick Actions</h2>
+                    <div class="action-buttons">
+                        <a href="create-ticket.html" class="btn btn-primary">Create New Ticket</a>
+                        <a href="view-tickets.html" class="btn btn-secondary">View All Tickets</a>
+                        <button onclick="logoutUser()" class="btn btn-secondary">Logout</button>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="dashboard-card">
+                    <h2>Ticket Statistics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <h3 id="totalTickets">0</h3>
+                            <p>Total Tickets</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3 id="activeTickets">0</h3>
+                            <p>Active Repairs</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3 id="completedTickets">0</h3>
+                            <p>Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Tickets -->
+            <div class="dashboard-card full-width">
+                <h2>Recent Tickets</h2>
+                <div id="recentTicketsContainer">
+                    <p class="loading">Loading tickets...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        // Load header and footer
+        fetch('components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+                updateHeaderForAuth();
+            });
+
+        fetch('components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-container').innerHTML = data);
+
+        // Check authentication on page load
+        checkAuthentication();
+        loadDashboardData();
+    </script>
+</body>
+</html>

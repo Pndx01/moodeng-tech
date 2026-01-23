@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Ticket - Moodeng Tech</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <section class="dashboard-hero">
+        <div class="container">
+            <h1>Create New Repair Ticket</h1>
+            <p>Enter customer and device information</p>
+        </div>
+    </section>
+
+    <section class="ticket-form-section">
+        <div class="container">
+            <div class="ticket-form-wrapper">
+                <form id="createTicketForm" class="ticket-form">
+                    
+                    <!-- Customer Information -->
+                    <div class="form-section">
+                        <h2>Customer Information</h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="09123456789">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Address *</label>
+                            <textarea id="address" name="address" rows="3" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Device Information -->
+                    <div class="form-section">
+                        <h2>Device Information</h2>
+                        
+                        <div class="form-group">
+                            <label for="laptopModel">Laptop Model *</label>
+                            <input type="text" id="laptopModel" name="laptopModel" required placeholder="e.g., Dell XPS 13, HP Pavilion 15">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serialNumber">Serial Number *</label>
+                            <input type="text" id="serialNumber" name="serialNumber" required placeholder="Found on bottom of laptop">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="issue">Laptop History / Issue Description *</label>
+                            <textarea id="issue" name="issue" rows="6" required placeholder="Describe the problem in detail: What's not working? When did it start? Any error messages? Previous repairs?"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Device Photos -->
+                    <div class="form-section">
+                        <h2>Device Photos (Minimum 3 Required) *</h2>
+                        <p class="form-note">Upload clear photos of: 1) Overall device, 2) Issue/damage area, 3) Serial number</p>
+                        
+                        <div class="form-group">
+                            <label for="photo1">Photo 1 (Overall Device) *</label>
+                            <input type="file" id="photo1" name="photo1" accept="image/*" required>
+                            <div class="photo-preview" id="preview1"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="photo2">Photo 2 (Issue/Damage Area) *</label>
+                            <input type="file" id="photo2" name="photo2" accept="image/*" required>
+                            <div class="photo-preview" id="preview2"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="photo3">Photo 3 (Serial Number) *</label>
+                            <input type="file" id="photo3" name="photo3" accept="image/*" required>
+                            <div class="photo-preview" id="preview3"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="photo4">Photo 4 (Optional)</label>
+                            <input type="file" id="photo4" name="photo4" accept="image/*">
+                            <div class="photo-preview" id="preview4"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="photo5">Photo 5 (Optional)</label>
+                            <input type="file" id="photo5" name="photo5" accept="image/*">
+                            <div class="photo-preview" id="preview5"></div>
+                        </div>
+                    </div>
+
+                    <!-- Repair Priority -->
+                    <div class="form-section">
+                        <h2>Repair Information</h2>
+                        
+                        <div class="form-group">
+                            <label for="priority">Priority *</label>
+                            <select id="priority" name="priority" required>
+                                <option value="">Select Priority...</option>
+                                <option value="standard">Standard (3-5 days)</option>
+                                <option value="express">Express (1-2 days) - Quickie Moodeng</option>
+                                <option value="urgent">Urgent (Same day if possible)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="estimatedDate">Estimated Completion Date *</label>
+                            <input type="date" id="estimatedDate" name="estimatedDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Internal Notes (Optional)</label>
+                            <textarea id="notes" name="notes" rows="3" placeholder="Any additional notes for technicians..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Create Ticket</button>
+                        <a href="dashboard.html" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/ticket.js"></script>
+    <script>
+        // Load header and footer
+        fetch('components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+                updateHeaderForAuth();
+            });
+
+        fetch('components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-container').innerHTML = data);
+
+        // Check authentication on page load
+        checkAuthentication();
+
+        // Set minimum date to today
+        document.getElementById('estimatedDate').min = new Date().toISOString().split('T')[0];
+    </script>
+</body>
+</html>

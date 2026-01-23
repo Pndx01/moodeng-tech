@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repair Tracker - Moodeng Tech</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/tracker.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <!-- Tracker Hero -->
+    <section class="tracker-hero">
+        <div class="container">
+            <h1>Track Your Repair</h1>
+            <p>Monitor your laptop repair progress in real-time</p>
+        </div>
+    </section>
+
+    <!-- Tracker Input -->
+    <section class="tracker-input-section">
+        <div class="container">
+            <div class="tracker-form">
+                <h2>Enter Your Repair ID</h2>
+                <form id="trackingForm">
+                    <div class="form-group">
+                        <label for="repairId">Repair ID or Phone Number:</label>
+                        <input 
+                            type="text" 
+                            id="repairId" 
+                            placeholder="e.g., MOO-2025-001 or 09123456789" 
+                            required
+                        >
+                    </div>
+                    <button type="submit" class="btn btn-primary">Track Repair</button>
+                </form>
+                <p class="tracker-info">You'll receive your Repair ID via SMS or email when you drop off your laptop.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sample Repairs Section -->
+    <section class="sample-repairs">
+        <div class="container">
+            <h2>Recent Tickets</h2>
+            <p class="section-intro">Click on a ticket below to track its status</p>
+            
+            <div class="sample-grid" id="recentTicketsGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            
+            <div style="margin-top: 2rem; text-align: center;">
+                <h3 style="color: #6b7280; font-size: 1rem; margin-bottom: 1rem;">Or try demo samples:</h3>
+                <div class="sample-grid">
+                    <div class="sample-card" onclick="trackRepair('MOO-2025-001')">
+                        <h4>Demo Sample #1</h4>
+                        <p>MOO-2025-001</p>
+                        <p class="status">Status: Ready for Pickup</p>
+                    </div>
+                    <div class="sample-card" onclick="trackRepair('MOO-2025-002')">
+                        <h4>Demo Sample #2</h4>
+                        <p>MOO-2025-002</p>
+                        <p class="status">Status: Repair in Progress</p>
+                    </div>
+                    <div class="sample-card" onclick="trackRepair('MOO-2025-003')">
+                        <h4>Demo Sample #3</h4>
+                        <p>MOO-2025-003</p>
+                        <p class="status">Status: Parts Ordered</p>
+                    </div>
+                    <div class="sample-card" onclick="trackRepair('MOO-2025-004')">
+                        <h4>Demo Sample #4</h4>
+                        <p>MOO-2025-004</p>
+                        <p class="status">Status: Diagnosed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Repair Status Display -->
+    <section class="tracker-results" id="trackerResults" style="display: none;">
+        <div class="container">
+            <div class="result-card">
+                <div class="result-header">
+                    <h2 id="repairIdDisplay"></h2>
+                    <a href="tracker.html" class="btn btn-secondary">Search Another</a>
+                </div>
+
+                <div class="repair-details">
+                    <div class="detail-item">
+                        <label>Device:</label>
+                        <span id="deviceInfo"></span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Issue:</label>
+                        <span id="issueInfo"></span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Drop-off Date:</label>
+                        <span id="dropoffDate"></span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Estimated Completion:</label>
+                        <span id="estimatedDate"></span>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline">
+                    <h3>Repair Progress</h3>
+                    <div class="timeline-stages" id="timelineStages"></div>
+                </div>
+
+                <!-- Current Status -->
+                <div class="current-status">
+                    <h3>Current Status</h3>
+                    <div class="status-box" id="statusBox"></div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="notifications">
+                    <h3>Notifications Preferences</h3>
+                    <p id="notificationPref"></p>
+                </div>
+
+                <!-- Repair History -->
+                <div class="repair-history">
+                    <h3>Recent Updates</h3>
+                    <div class="history-log" id="historyLog"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How Tracking Works -->
+    <section class="how-tracking">
+        <div class="container">
+            <h2>How Our Tracking System Works</h2>
+            <div class="tracking-info-grid">
+                <div class="info-card">
+                    <h3>📱 Real-Time Updates</h3>
+                    <p>Receive SMS and email updates at each stage of your repair so you always know what's happening.</p>
+                </div>
+                <div class="info-card">
+                    <h3>🔐 Secure & Private</h3>
+                    <p>Your repair information is secure and only accessible with your unique Repair ID.</p>
+                </div>
+                <div class="info-card">
+                    <h3>⏰ Accurate Timeline</h3>
+                    <p>We provide honest estimates based on the type of repair and parts availability.</p>
+                </div>
+                <div class="info-card">
+                    <h3>📞 Direct Contact</h3>
+                    <p>Need to check on your repair? Contact us during business hours 8:00 AM - 10:00 PM.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-items">
+                <div class="faq-item">
+                    <h4>How long does a typical repair take?</h4>
+                    <p>It depends on the issue. Express repairs (RAM upgrades, SSD installation) take 30-60 minutes. Complex repairs vary, but we always provide honest timelines.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What's the warranty on repairs?</h4>
+                    <p>All repairs come with a warranty. Ask our team about specific warranty details when you drop off your laptop.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Can I watch my repair?</h4>
+                    <p>Yes! We offer optional live camera feed so you can watch your repair in progress if you'd like.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What if parts need to be ordered?</h4>
+                    <p>We'll contact you immediately and provide an honest timeline. We'll keep you updated throughout the process.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>How do I get my Repair ID?</h4>
+                    <p>You'll receive your Repair ID via SMS and email when you drop off your laptop at our shop.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Is my data safe?</h4>
+                    <p>Absolutely. We perform automatic backups before any repair (with your consent) and handle your data with complete care.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="tracker-cta">
+        <div class="container">
+            <h2>Can't Find Your Repair?</h2>
+            <p>Contact us directly and we'll help you track it down.</p>
+            <a href="contact.html" class="btn btn-primary">Contact Us</a>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/ticket.js"></script>
+    <script src="js/tracker.js"></script>
+    <script>
+        // Load header and footer
+        fetch('components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+                updateHeaderForAuth();
+            });
+
+        fetch('components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-container').innerHTML = data);
+    </script>
+</body>
+</html>

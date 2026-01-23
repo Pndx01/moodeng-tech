@@ -1,0 +1,21 @@
+{
+  "name": "laptop-repair-website",
+  "version": "1.0.0",
+  "description": "A website for laptop repair services with a service tracker.",
+  "main": "src/index.html",
+  "scripts": {
+    "start": "live-server src",
+    "build": "echo 'Build process not defined yet.'"
+  },
+  "keywords": [
+    "laptop",
+    "repair",
+    "services",
+    "tracker"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "live-server": "^1.2.1"
+  }
+}

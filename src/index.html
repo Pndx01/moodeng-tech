@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodeng Tech - Expert Laptop Repair Service</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-logo">
+                    <img src="images/logo.png" alt="Moodeng Tech Logo" class="logo-image">
+                </div>
+                <h1>Expert Laptop Repair Service</h1>
+                <p>We keep your laptop running smoothly. Professional diagnostics, transparent pricing, genuine care.</p>
+                <div class="hero-buttons">
+                    <a href="tracker.html" class="btn btn-primary">Track Your Repair</a>
+                    <a href="services.html" class="btn btn-secondary">View Services</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats -->
+    <section class="stats">
+        <div class="container">
+            <div class="stat-card">
+                <h3>Established 2025</h3>
+                <p>Ramil & Friends Incorporated</p>
+            </div>
+            <div class="stat-card">
+                <h3>Laptop Specialists</h3>
+                <p>Exclusive focus on laptops only</p>
+            </div>
+            <div class="stat-card">
+                <h3>24/7 Support</h3>
+                <p>Open 8:00 AM - 10:00 PM Daily</p>
+            </div>
+            <div class="stat-card">
+                <h3>Transparent Pricing</h3>
+                <p>No hidden fees, ever</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Overview -->
+    <section class="services-overview">
+        <div class="container">
+            <h2>What We Offer</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🔧</div>
+                    <h3>Hardware Repairs & Upgrades</h3>
+                    <p>Cracked screens, keyboards, batteries, ports, and more. Plus RAM and storage upgrades.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💻</div>
+                    <h3>Software Troubleshooting</h3>
+                    <p>OS errors, application crashes, virus removal, and performance optimization.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🔍</div>
+                    <h3>Data Recovery</h3>
+                    <p>Retrieve lost files from damaged or malfunctioning laptops.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h3>Preventive Maintenance</h3>
+                    <p>Regular check-ups to keep your laptop running at peak performance.</p>
+                </div>
+            </div>
+            <div class="services-cta">
+                <a href="services.html" class="btn btn-primary">Explore All Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Trust Us -->
+    <section class="why-trust">
+        <div class="container">
+            <h2>Why People Trust Moodeng Tech</h2>
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <h4>Integrity First</h4>
+                    <p>Complete transparency - we recommend only what you need</p>
+                </div>
+                <div class="trust-item">
+                    <h4>Specialized Expertise</h4>
+                    <p>Exclusive focus on laptops means we know these machines better than anyone</p>
+                </div>
+                <div class="trust-item">
+                    <h4>Fast Turnaround</h4>
+                    <p>Quick service without cutting corners - your time matters to us</p>
+                </div>
+                <div class="trust-item">
+                    <h4>Fair Pricing</h4>
+                    <p>Honest and competitive rates - quality shouldn't break the bank</p>
+                </div>
+                <div class="trust-item">
+                    <h4>Genuine Service</h4>
+                    <p>Real people who enjoy what they do - it shows in every interaction</p>
+                </div>
+                <div class="trust-item">
+                    <h4>Community Commitment</h4>
+                    <p>Building lasting relationships with the people we serve</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Innovation Features -->
+    <section class="innovations">
+        <div class="container">
+            <h2>Our Innovations</h2>
+            <div class="innovation-grid">
+                <div class="innovation-card">
+                    <h3>📱 Real-Time Repair Tracking</h3>
+                    <p>SMS/email updates at each stage: received → diagnosed → parts ordered → repair in progress → ready for pickup</p>
+                </div>
+                <div class="innovation-card">
+                    <h3>⏱️ Express Lane Service</h3>
+                    <p>"Quickie Moodeng" - quick fixes in 30-60 minutes (RAM upgrades, SSD installation, etc.)</p>
+                </div>
+                <div class="innovation-card">
+                    <h3>🎓 Student Partnership</h3>
+                    <p>Special rates for students with valid ID and bulk discounts for student organizations</p>
+                </div>
+                <div class="innovation-card">
+                    <h3>♻️ Trade-In Program</h3>
+                    <p>Buy back old laptops, eco-friendly e-waste disposal, and discounts on trades</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Get Your Laptop Fixed?</h2>
+            <p>Whether it's an emergency repair or routine maintenance, we're here to help.</p>
+            <div class="cta-buttons">
+                <a href="contact.html" class="btn btn-primary">Contact Us Now</a>
+                <a href="tracker.html" class="btn btn-secondary">Track Existing Repair</a>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Load header and footer
+        fetch('components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+                updateHeaderForAuth();
+            });
+
+        fetch('components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-container').innerHTML = data);
+    </script>
+</body>
+</html>

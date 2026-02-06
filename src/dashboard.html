@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Moodeng Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
@@ -23,17 +26,26 @@
                 <!-- Quick Actions -->
                 <div class="dashboard-card">
                     <h2>Quick Actions</h2>
-                    <div class="action-buttons">
-                        <a href="create-ticket.html" class="btn btn-primary">Create New Ticket</a>
-                        <a href="view-tickets.html" class="btn btn-secondary">View All Tickets</a>
-                        <button onclick="logoutUser()" class="btn btn-secondary">Logout</button>
+                    <div class="action-buttons" id="actionButtons">
+                        <a href="create-ticket.html" class="btn btn-primary" id="createTicketBtn">
+                            <span class="btn-icon">+</span> Create New Ticket
+                        </a>
+                        <a href="view-tickets.html" class="btn btn-secondary">
+                            <span class="btn-icon"></span> View All Tickets
+                        </a>
+                        <a href="messages.html" class="btn btn-secondary" id="viewMessagesBtn" style="display: none;">
+                            <span class="btn-icon"></span> Customer Messages
+                        </a>
+                        <a href="tracker.html" class="btn btn-secondary" id="trackTicketBtn" style="display: none;">
+                            <span class="btn-icon"></span> Track My Ticket
+                        </a>
                     </div>
                 </div>
 
                 <!-- Statistics -->
-                <div class="dashboard-card">
-                    <h2>Ticket Statistics</h2>
-                    <div class="stats-grid">
+                <div class="dashboard-card" id="statsCard">
+                    <h2><span id="statsTitle">Ticket Statistics</span></h2>
+                    <div class="stats-grid" id="statsGrid">
                         <div class="stat-box">
                             <h3 id="totalTickets">0</h3>
                             <p>Total Tickets</p>
@@ -50,8 +62,64 @@
                 </div>
             </div>
 
-            <!-- Recent Tickets -->
-            <div class="dashboard-card full-width">
+            <!-- Pending User Approvals (Admin only) -->
+            <div class="dashboard-card full-width" id="pendingApprovalsSection" style="display: none;">
+                <h2>Pending User Approvals</h2>
+                <div id="pendingApprovalsContainer">
+                    <p class="loading">Loading pending approvals...</p>
+                </div>
+            </div>
+
+            <!-- Technician Sections -->
+            <!-- My Ongoing Repairs -->
+            <div class="dashboard-card full-width" id="myOngoingSection" style="display: none;">
+                <div class="section-header">
+                    <h2>My Ongoing Repairs</h2>
+                    <span class="section-badge" id="ongoingCount">0</span>
+                </div>
+                <div id="myOngoingContainer">
+                    <p class="loading">Loading your repairs...</p>
+                </div>
+            </div>
+
+            <!-- Back Jobs (Returned for Re-repair) -->
+            <div class="dashboard-card full-width" id="backJobsSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Back Jobs</h2>
+                    <span class="section-badge warning" id="backJobCount">0</span>
+                </div>
+                <p class="section-description">Tickets that were returned for additional repairs or fixes</p>
+                <div id="backJobsContainer">
+                    <p class="loading">Loading back jobs...</p>
+                </div>
+            </div>
+
+            <!-- For Pick Up -->
+            <div class="dashboard-card full-width" id="forPickUpSection" style="display: none;">
+                <div class="section-header">
+                    <h2>For Pick Up</h2>
+                    <span class="section-badge info" id="forPickUpCount">0</span>
+                </div>
+                <p class="section-description">Repairs completed and ready for customer pick up</p>
+                <div id="forPickUpContainer">
+                    <p class="loading">Loading tickets ready for pick up...</p>
+                </div>
+            </div>
+
+            <!-- Released/Completed -->
+            <div class="dashboard-card full-width" id="releasedSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Released / Completed</h2>
+                    <span class="section-badge success" id="releasedCount">0</span>
+                </div>
+                <p class="section-description">Successfully completed and picked up by customers</p>
+                <div id="releasedContainer">
+                    <p class="loading">Loading completed tickets...</p>
+                </div>
+            </div>
+
+            <!-- Recent Tickets (Admin/Tech only) -->
+            <div class="dashboard-card full-width" id="recentTicketsSection" style="display: none;">
                 <h2>Recent Tickets</h2>
                 <div id="recentTicketsContainer">
                     <p class="loading">Loading tickets...</p>
@@ -62,8 +130,17 @@
 
     <div id="footer-container"></div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/socket.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/dashboard.js"></script>
+    <script src="js/ticket.new.js"></script>
+    <script src="js/dashboard.new.js"></script>
     <script>
         // Load header and footer
         fetch('components/header.html')
@@ -71,6 +148,10 @@
             .then(data => {
                 document.getElementById('header-container').innerHTML = data;
                 updateHeaderForAuth();
+                // Update register link visibility after header is loaded
+                if (typeof updateRegisterLinkVisibility === 'function') {
+                    updateRegisterLinkVisibility();
+                }
             });
 
         fetch('components/footer.html')
@@ -79,7 +160,7 @@
 
         // Check authentication on page load
         checkAuthentication();
-        loadDashboardData();
+        // Dashboard data is loaded by initDashboard on DOMContentLoaded in dashboard.new.js
     </script>
 </body>
 </html>

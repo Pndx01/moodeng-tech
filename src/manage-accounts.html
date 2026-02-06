@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Accounts - Moodeng Tech</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .accounts-hero {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .accounts-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .accounts-content {
+            padding: 40px 0;
+            min-height: 50vh;
+        }
+        
+        .accounts-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .filter-tab:hover {
+            border-color: #1e40af;
+            color: #1e40af;
+        }
+        
+        .filter-tab.active {
+            background: #1e40af;
+            color: white;
+            border-color: #1e40af;
+        }
+        
+        .accounts-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .accounts-table th,
+        .accounts-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .accounts-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .accounts-table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .role-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .role-ADMIN {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .role-TECHNICIAN {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .role-CUSTOMER {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+            margin-right: 8px;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+        
+        .account-count {
+            background: #1e40af;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        
+        .no-accounts {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        
+        .loading-message {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #1e40af;
+        }
+        
+        /* Edit Role Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-content h3 {
+            margin: 0 0 20px 0;
+            color: #1e40af;
+        }
+        
+        .modal-content label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .modal-content select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .btn-cancel {
+            background: #e5e7eb;
+            color: #374151;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .btn-save {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .accounts-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        /* Confirmation Modal */
+        .confirm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 1rem;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .confirm-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .confirm-modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #fee2e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+
+        .confirm-modal-icon svg {
+            color: #dc2626;
+        }
+
+        .confirm-modal h3 {
+            font-size: 1.25rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .confirm-modal p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .confirm-modal-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .confirm-modal-buttons .btn {
+            min-width: 100px;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+    
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="confirm-modal-overlay" style="display: none;">
+        <div class="confirm-modal">
+            <div class="confirm-modal-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h3 id="confirmTitle">Confirm Action</h3>
+            <p id="confirmMessage">Are you sure you want to proceed?</p>
+            <div class="confirm-modal-buttons">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+                <button class="btn btn-danger" id="confirmActionBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Account Modal -->
+    <div id="editRoleModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 450px;">
+            <h3>Edit Account</h3>
+            <input type="hidden" id="editUserId">
+            <p id="editUserName" style="color: #64748b; margin-bottom: 20px; font-weight: 500;"></p>
+            
+            <label for="editRoleSelect">Role:</label>
+            <select id="editRoleSelect">
+                <option value="CUSTOMER">Customer</option>
+                <option value="TECHNICIAN">Technician</option>
+                <option value="ADMIN">Admin</option>
+            </select>
+            
+            <div style="border-top: 1px solid #e5e7eb; margin: 20px 0; padding-top: 20px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 15px;">
+                    <input type="checkbox" id="changePasswordCheckbox" onchange="togglePasswordFields()" style="width: 18px; height: 18px; accent-color: #1e40af;">
+                    <span>Change Password</span>
+                </label>
+                
+                <div id="passwordFields" style="display: none;">
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password (min 6 characters)" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; margin-bottom: 15px; box-sizing: border-box;">
+                    
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm new password" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; margin-bottom: 10px; box-sizing: border-box;">
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+                <button class="btn-save" onclick="saveAccountChanges()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <section class="accounts-hero">
+        <div class="container">
+            <h1>Manage Accounts</h1>
+            <p>View and manage all user accounts</p>
+        </div>
+    </section>
+
+    <section class="accounts-content">
+        <div class="container">
+            <div class="accounts-card">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by name or email..." oninput="filterAccounts()">
+                </div>
+                
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">All Accounts</button>
+                    <button class="filter-tab" data-filter="ADMIN" onclick="setFilter('ADMIN')">Admins</button>
+                    <button class="filter-tab" data-filter="TECHNICIAN" onclick="setFilter('TECHNICIAN')">Technicians</button>
+                    <button class="filter-tab" data-filter="CUSTOMER" onclick="setFilter('CUSTOMER')">Customers</button>
+                </div>
+                
+                <div id="accountsContent">
+                    <p class="loading-message">Loading accounts...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let allAccounts = [];
+        let currentFilter = 'all';
+        
+        // Load header and footer
+        fetch('components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+                updateHeaderForAuth();
+                // Update register link visibility after header is loaded
+                if (typeof updateRegisterLinkVisibility === 'function') {
+                    updateRegisterLinkVisibility();
+                }
+            });
+
+        fetch('components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-container').innerHTML = data);
+
+        // Check if user is admin
+        document.addEventListener('DOMContentLoaded', function() {
+            const session = getUserSession();
+            
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const role = session.role?.toUpperCase();
+            if (role !== 'ADMIN') {
+                alert('Access denied. Admin only.');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            loadAccounts();
+        });
+
+        async function loadAccounts() {
+            const container = document.getElementById('accountsContent');
+            
+            if (!api.isAuthenticated()) {
+                container.innerHTML = `
+                    <div class="no-accounts">
+                        <p>Please log in again to view accounts.</p>
+                        <button onclick="logoutUser()" class="btn btn-primary">Logout & Login Again</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                const response = await api.get(`${API_CONFIG.ENDPOINTS.USERS}?limit=100`);
+                
+                if (response.success && response.data.users) {
+                    allAccounts = response.data.users;
+                    displayAccounts(allAccounts);
+                } else {
+                    container.innerHTML = '<div class="no-accounts"><p>Failed to load accounts.</p></div>';
+                }
+            } catch (error) {
+                console.error('Error loading accounts:', error);
+                container.innerHTML = `<div class="no-accounts"><p>Error: ${error.message}</p></div>`;
+            }
+        }
+        
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.filter === filter);
+            });
+            filterAccounts();
+        }
+        
+        function filterAccounts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = allAccounts;
+            
+            // Filter by role
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(acc => acc.role === currentFilter);
+            }
+            
+            // Filter by search term
+            if (searchTerm) {
+                filtered = filtered.filter(acc => 
+                    acc.firstName?.toLowerCase().includes(searchTerm) ||
+                    acc.lastName?.toLowerCase().includes(searchTerm) ||
+                    acc.email?.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            displayAccounts(filtered);
+        }
+        
+        function displayAccounts(accounts) {
+            const container = document.getElementById('accountsContent');
+            
+            if (accounts.length === 0) {
+                container.innerHTML = '<div class="no-accounts"><p>No accounts found.</p></div>';
+                return;
+            }
+            
+            let html = `
+                <h2 style="margin-bottom: 15px;">
+                    User Accounts <span class="account-count">${accounts.length}</span>
+                </h2>
+                <table class="accounts-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            accounts.forEach(account => {
+                const statusClass = account.isApproved ? 'status-approved' : 'status-pending';
+                const statusText = account.isApproved ? 'Approved' : 'Pending';
+                
+                html += `
+                    <tr id="account-${account.id}">
+                        <td><strong>${account.firstName} ${account.lastName}</strong></td>
+                        <td>${account.email}</td>
+                        <td>${account.phone || '-'}</td>
+                        <td><span class="role-badge role-${account.role}">${account.role}</span></td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="btn-edit" onclick="openEditModal('${account.id}', '${account.firstName} ${account.lastName}', '${account.role}')">Edit</button>
+                            <button class="btn-delete" onclick="deleteAccount('${account.id}', '${account.firstName} ${account.lastName}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        
+        function openEditModal(userId, userName, currentRole) {
+            document.getElementById('editUserId').value = userId;
+            document.getElementById('editUserName').textContent = userName;
+            document.getElementById('editRoleSelect').value = currentRole;
+            // Reset password fields
+            document.getElementById('changePasswordCheckbox').checked = false;
+            document.getElementById('passwordFields').style.display = 'none';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            document.getElementById('editRoleModal').style.display = 'flex';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editRoleModal').style.display = 'none';
+        }
+        
+        function togglePasswordFields() {
+            const checkbox = document.getElementById('changePasswordCheckbox');
+            const fields = document.getElementById('passwordFields');
+            fields.style.display = checkbox.checked ? 'block' : 'none';
+            if (!checkbox.checked) {
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            }
+        }
+        
+        async function saveAccountChanges() {
+            const userId = document.getElementById('editUserId').value;
+            const newRole = document.getElementById('editRoleSelect').value;
+            const changePassword = document.getElementById('changePasswordCheckbox').checked;
+            
+            try {
+                // Update role
+                const roleResponse = await api.patch(`${API_CONFIG.ENDPOINTS.USERS}/${userId}`, { role: newRole });
+                
+                if (!roleResponse.success) {
+                    throw new Error('Failed to update role');
+                }
+                
+                // Update password if checkbox is checked
+                if (changePassword) {
+                    const newPassword = document.getElementById('newPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    
+                    if (!newPassword || newPassword.length < 6) {
+                        showNotification('Password must be at least 6 characters', 'error');
+                        return;
+                    }
+                    
+                    if (newPassword !== confirmPassword) {
+                        showNotification('Passwords do not match', 'error');
+                        return;
+                    }
+                    
+                    const passwordResponse = await api.patch(`${API_CONFIG.ENDPOINTS.USERS}/${userId}/reset-password`, { 
+                        newPassword: newPassword 
+                    });
+                    
+                    if (!passwordResponse.success) {
+                        throw new Error('Failed to change password');
+                    }
+                }
+                
+                closeEditModal();
+                showNotification(changePassword ? 'Account updated and password changed!' : 'Account updated successfully!', 'success');
+                loadAccounts();
+            } catch (error) {
+                showNotification(error.message || 'Failed to update account', 'error');
+            }
+        }
+
+        // Custom Confirmation Modal Functions
+        let confirmCallback = null;
+
+        function showConfirmModal(title, message, callback) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            confirmCallback = callback;
+            document.getElementById('confirmModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            document.body.style.overflow = '';
+            confirmCallback = null;
+        }
+
+        document.getElementById('confirmActionBtn').addEventListener('click', function() {
+            if (confirmCallback) {
+                confirmCallback();
+            }
+            closeConfirmModal();
+        });
+
+        // Close confirm modal on overlay click
+        document.getElementById('confirmModal').addEventListener('click', function(e) {
+            if (e.target === this) closeConfirmModal();
+        });
+        
+        async function deleteAccount(userId, userName) {
+            showConfirmModal(
+                'Delete Account',
+                `Are you sure you want to delete the account for "${userName}"? This action cannot be undone.`,
+                () => performDeleteAccount(userId)
+            );
+        }
+
+        async function performDeleteAccount(userId) {
+            try {
+                const response = await api.delete(`${API_CONFIG.ENDPOINTS.USERS}/${userId}`);
+                
+                if (response.success) {
+                    // Remove from table
+                    const row = document.getElementById(`account-${userId}`);
+                    if (row) {
+                        row.style.background = '#fee2e2';
+                        setTimeout(() => {
+                            row.remove();
+                            // Update allAccounts array
+                            allAccounts = allAccounts.filter(acc => acc.id !== userId);
+                            if (allAccounts.length === 0) {
+                                displayAccounts([]);
+                            }
+                        }, 300);
+                    }
+                    showNotification('Account deleted successfully!', 'success');
+                }
+            } catch (error) {
+                showNotification(error.message || 'Failed to delete account', 'error');
+            }
+        }
+        
+    </script>
+</body>
+</html>

@@ -87,7 +87,17 @@ function handleTicketSubmit(e) {
         createdBy: `${session.firstName} ${session.lastName}`,
         createdById: session.id,
         createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         dropoffDate: new Date().toISOString().split('T')[0],
+        
+        // Assign to technician if created by tech/admin
+        assignedTechId: ['TECHNICIAN', 'ADMIN'].includes(session.role?.toUpperCase()) ? session.id : null,
+        assignedTechName: ['TECHNICIAN', 'ADMIN'].includes(session.role?.toUpperCase()) ? `${session.firstName} ${session.lastName}` : null,
+        
+        // Back job tracking
+        isBackJob: false,
+        backJobDate: null,
+        releasedDate: null,
         
         // Timeline
         timeline: [

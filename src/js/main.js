@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSmoothScroll();
     initializeFormValidation();
     initializeAnimations();
+    initializeScrollToTop();
+    initializeScrollReveal();
 });
 
 // Smooth scroll behavior for anchor links
@@ -29,6 +31,69 @@ function initializeSmoothScroll() {
                 }
             }
         });
+    });
+}
+
+// ============================================================================
+// SCROLL TO TOP BUTTON
+// ============================================================================
+
+function initializeScrollToTop() {
+    // Create scroll to top button
+    const scrollBtn = document.createElement('button');
+    scrollBtn.id = 'scrollToTop';
+    scrollBtn.className = 'scroll-to-top';
+    scrollBtn.innerHTML = '↑';
+    scrollBtn.setAttribute('aria-label', 'Scroll to top');
+    document.body.appendChild(scrollBtn);
+
+    // Show/hide button based on scroll position
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 400) {
+            scrollBtn.classList.add('visible');
+        } else {
+            scrollBtn.classList.remove('visible');
+        }
+    });
+
+    // Scroll to top on click
+    scrollBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// ============================================================================
+// SCROLL REVEAL ANIMATIONS
+// ============================================================================
+
+function initializeScrollReveal() {
+    const revealElements = document.querySelectorAll(
+        '.service-card, .stat-card, .team-member, .faq-item, .feature-card, ' +
+        '.service-card-new, .contact-info-box, .service-detail, .special-card, ' +
+        '.mission-box, .step, .stage, .trust-item, .choose-item, .innovation-card'
+    );
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Stagger the animations
+                setTimeout(() => {
+                    entry.target.classList.add('revealed');
+                }, index * 50);
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => {
+        el.classList.add('reveal-element');
+        revealObserver.observe(el);
     });
 }
 
@@ -270,13 +335,59 @@ style.textContent = `
         animation: fadeIn 0.6s ease forwards;
     }
 
+    /* Reveal animation styles */
+    .reveal-element {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal-element.revealed {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Scroll to top button styles (backup if CSS not loaded) */
+    .scroll-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 999;
+    }
+
+    .scroll-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .scroll-to-top:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+    }
+
     @media (max-width: 768px) {
+        .scroll-to-top,
         #scrollToTop {
             width: 45px !important;
             height: 45px !important;
             font-size: 1.2rem !important;
-            bottom: 15px !important;
-            right: 15px !important;
+            bottom: 20px !important;
+            right: 20px !important;
         }
     }
 `;

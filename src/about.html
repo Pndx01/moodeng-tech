@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Moodeng Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -22,8 +25,8 @@
         <div class="container">
             <div class="story-content">
                 <div class="story-text">
-                    <h2>Who is R&F Incorporated?</h2>
-                    <p><strong>Ramil & Friends Incorporated</strong> was established in 2025 as a small business entrepreneurship by Noriel, Rengiee, Belle, Dave, and Jeff alongside Ramil.</p>
+                    <h2>Who is R&F?</h2>
+                    <p><strong>Ramil & Friends (R&F)</strong> was established in 2025 as a small business by Noriel, Rengiee, Belle, Dave, and Jeff alongside Ramil.</p>
                     <p>The "Friends" in Ramil & Friends isn't just branding. We promise to approach every client relationship with <strong>trust, transparency, and genuine care</strong>. We're here for the long haul, building relationships that extend beyond a single repair.</p>
                 </div>
                 <div class="story-highlight">
@@ -90,7 +93,7 @@
                 </div>
                 <div class="team-member">
                     <img src="images/edrian.jpg" alt="Edrian" class="member-photo" onerror="this.parentElement.classList.add('no-image')">
-                    <div class="member-avatar">B</div>
+                    <div class="member-avatar">E</div>
                     <h3>Edrian</h3>
                     <p>Asset & Equipment Management Officer</p>
                 </div>
@@ -116,27 +119,27 @@
             <h2>Why Choose Moodeng Tech?</h2>
             <div class="choose-grid">
                 <div class="choose-item">
-                    <h3>✓ Integrity First</h3>
+                    <h3>Integrity First</h3>
                     <p>We operate with complete transparency and recommend only what you need - never overselling or unnecessary upsells.</p>
                 </div>
                 <div class="choose-item">
-                    <h3>✓ Specialized Expertise</h3>
+                    <h3>Specialized Expertise</h3>
                     <p>Our exclusive focus on laptops means we know these machines better than any generalist repair shop.</p>
                 </div>
                 <div class="choose-item">
-                    <h3>✓ Fast Turnaround</h3>
+                    <h3>Fast Turnaround</h3>
                     <p>We respect your time and work efficiently without compromising quality - express service available for quick fixes.</p>
                 </div>
                 <div class="choose-item">
-                    <h3>✓ Fair Pricing</h3>
+                    <h3>Fair Pricing</h3>
                     <p>Quality service shouldn't break the bank. Our rates are honest, competitive, and transparent.</p>
                 </div>
                 <div class="choose-item">
-                    <h3>✓ Genuine Service</h3>
+                    <h3>Genuine Service</h3>
                     <p>We're real people who enjoy what we do. That passion and integrity shows in every interaction.</p>
                 </div>
                 <div class="choose-item">
-                    <h3>✓ Community Commitment</h3>
+                    <h3>Community Commitment</h3>
                     <p>We're invested in building lasting relationships with the people we serve, not just processing repairs.</p>
                 </div>
             </div>
@@ -144,6 +147,11 @@
     </section>
 
     <div id="footer-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
 
     <script src="js/auth.js"></script>
     <script>
@@ -153,6 +161,9 @@
             .then(data => {
                 document.getElementById('header-container').innerHTML = data;
                 updateHeaderForAuth();
+                if (typeof updateRegisterLinkVisibility === 'function') {
+                    updateRegisterLinkVisibility();
+                }
             });
 
         fetch('components/footer.html')

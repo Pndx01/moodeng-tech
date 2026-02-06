@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Services - Moodeng Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -23,7 +26,7 @@
             <h2>Core Services</h2>
             
             <div class="service-detail">
-                <div class="service-detail-icon">🔧</div>
+                <div class="service-detail-icon"></div>
                 <h3>Hardware Repairs & Upgrades</h3>
                 <p>We fix it all, no matter what's broken:</p>
                 <ul class="service-list">
@@ -32,14 +35,13 @@
                     <li>Failing batteries and chargers</li>
                     <li>Malfunctioning ports (USB, HDMI, etc.)</li>
                     <li>Cooling system issues</li>
-                    <li>Motherboard repairs</li>
                     <li>RAM upgrades for better performance</li>
                     <li>Storage upgrades (SSD installation)</li>
                 </ul>
             </div>
 
             <div class="service-detail">
-                <div class="service-detail-icon">💻</div>
+                <div class="service-detail-icon"></div>
                 <h3>Software Troubleshooting</h3>
                 <p>Operating system errors, application crashes, performance issues - we diagnose and fix:</p>
                 <ul class="service-list">
@@ -55,7 +57,7 @@
             </div>
 
             <div class="service-detail">
-                <div class="service-detail-icon">🔍</div>
+                <div class="service-detail-icon"></div>
                 <h3>Data Recovery</h3>
                 <p>Lost critical files? We specialize in data recovery:</p>
                 <ul class="service-list">
@@ -71,7 +73,7 @@
             </div>
 
             <div class="service-detail">
-                <div class="service-detail-icon">⚡</div>
+                <div class="service-detail-icon"></div>
                 <h3>Preventive Maintenance</h3>
                 <p>Keep your laptop running at peak performance with regular maintenance:</p>
                 <ul class="service-list">
@@ -88,6 +90,102 @@
         </div>
     </section>
 
+    <!-- Pricing Section -->
+    <section class="pricing-section" style="padding: 4rem 0; background: #f8fafc;">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 0.5rem;">Transparent Pricing</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 2rem;">No hidden fees, no surprises - just honest rates</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <!-- Hardware Repairs -->
+                <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <h3 style="color: #1e40af; margin-bottom: 1rem;">Hardware Repairs</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>Screen Replacement</span>
+                            <strong>₱3,500 - ₱8,000</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>Keyboard Replacement</span>
+                            <strong>₱1,500 - ₱3,500</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>Battery Replacement</span>
+                            <strong>₱2,000 - ₱4,500</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>Charging Port Repair</span>
+                            <strong>₱800 - ₱2,000</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
+                            <span>Hinge Repair</span>
+                            <strong>₱1,200 - ₱3,000</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Upgrades -->
+                <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <h3 style="color: #1e40af; margin-bottom: 1rem;">Upgrades</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>RAM Upgrade (8GB)</span>
+                            <strong>₱1,500 - ₱2,500</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>RAM Upgrade (16GB)</span>
+                            <strong>₱3,000 - ₱4,500</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>SSD Upgrade (256GB)</span>
+                            <strong>₱2,000 - ₱3,000</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>SSD Upgrade (512GB)</span>
+                            <strong>₱3,500 - ₱5,000</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
+                            <span>SSD Upgrade (1TB)</span>
+                            <strong>₱5,500 - ₱8,000</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Software & Services -->
+                <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <h3 style="color: #1e40af; margin-bottom: 1rem;">Software & Services</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>OS Reinstallation</span>
+                            <strong>₱800 - ₱1,500</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>Virus Removal</span>
+                            <strong>₱500 - ₱1,200</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>Data Recovery (Basic)</span>
+                            <strong>₱1,500 - ₱3,000</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <span>Data Recovery (Advanced)</span>
+                            <strong>₱3,500 - ₱8,000</strong>
+                        </li>
+                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
+                            <span>Preventive Maintenance</span>
+                            <strong>₱800 - ₱1,500</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: #e0f2fe; border-radius: 12px;">
+                <p style="margin: 0; color: #0369a1;"><strong>Student Discount:</strong> Show your valid student ID and get <strong>10-15% off</strong> on all services!</p>
+            </div>
+            <p style="text-align: center; color: #64748b; margin-top: 1rem; font-size: 0.9rem;">* Prices may vary depending on laptop brand/model and parts availability. Final quote provided after diagnosis.</p>
+        </div>
+    </section>
+
     <!-- Special Services -->
     <section class="special-services">
         <div class="container">
@@ -95,7 +193,7 @@
             
             <div class="special-grid">
                 <div class="special-card">
-                    <h3>🚀 Quickie Moodeng</h3>
+                    <h3>Quickie Moodeng</h3>
                     <h4>Express Service</h4>
                     <p>Quick fixes in 30-60 minutes for common issues:</p>
                     <ul>
@@ -107,13 +205,13 @@
                 </div>
 
                 <div class="special-card">
-                    <h3>💾 Data Backup Service</h3>
+                    <h3>Data Backup Service</h3>
                     <h4>Automatic Backup Before Repair</h4>
                     <p>We automatically backup your data before any repair (with your consent). Premium data recovery service available.</p>
                 </div>
 
                 <div class="special-card">
-                    <h3>🏥 Moodeng Health Check</h3>
+                    <h3>Moodeng Health Check</h3>
                     <h4>Preventive Maintenance Package</h4>
                     <p>Comprehensive diagnostic service including:</p>
                     <ul>
@@ -125,19 +223,19 @@
                 </div>
 
                 <div class="special-card">
-                    <h3>🎓 Student Partnership</h3>
+                    <h3>Student Partnership</h3>
                     <h4>Special Student Rates</h4>
                     <p>Students with valid ID get special discounts on all services. Bulk discounts available for student organizations.</p>
                 </div>
 
                 <div class="special-card">
-                    <h3>♻️ Trade-In Program</h3>
+                    <h3>Trade-In Program</h3>
                     <h4>Eco-Friendly Recycling</h4>
                     <p>Trade in your old/broken laptop for discounts on repairs. We recycle parts responsibly and dispose of e-waste properly.</p>
                 </div>
 
                 <div class="special-card">
-                    <h3>🔄 Refurbished Laptops</h3>
+                    <h3>Refurbished Laptops</h3>
                     <h4>Budget-Friendly Options</h4>
                     <p>We repair and resell donated/traded-in laptops. Perfect for students and budget-conscious customers. All units come with warranty.</p>
                 </div>
@@ -221,7 +319,37 @@
         </div>
     </section>
 
+    <!-- Warranty Section -->
+    <section class="warranty-section" style="padding: 4rem 0; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white;">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Our Warranty Promise</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+                <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">30</div>
+                    <h3 style="margin-bottom: 0.5rem;">Days Warranty</h3>
+                    <p style="opacity: 0.9;">All hardware repairs come with a 30-day service warranty</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;"></div>
+                    <h3 style="margin-bottom: 0.5rem;">Quality Guaranteed</h3>
+                    <p style="opacity: 0.9;">We use high-quality and genuine replacement parts</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;"></div>
+                    <h3 style="margin-bottom: 0.5rem;">Free Re-service</h3>
+                    <p style="opacity: 0.9;">If the same issue recurs within warranty, we fix it free</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 2rem; opacity: 0.9;">* Warranty covers the specific repair performed. Physical damage or misuse after repair is not covered.</p>
+        </div>
+    </section>
+
     <div id="footer-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
 
     <script src="js/auth.js"></script>
     <script>
@@ -231,6 +359,9 @@
             .then(data => {
                 document.getElementById('header-container').innerHTML = data;
                 updateHeaderForAuth();
+                if (typeof updateRegisterLinkVisibility === 'function') {
+                    updateRegisterLinkVisibility();
+                }
             });
 
         fetch('components/footer.html')

@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Messages - Moodeng Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .messages-hero {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .messages-hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .messages-content {
+            padding: 3rem 0;
+            background-color: #f9fafb;
+            min-height: 60vh;
+        }
+
+        .messages-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .messages-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .stat-item .label {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .stat-item.unread .number {
+            color: #dc2626;
+        }
+
+        .messages-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid #e5e7eb;
+            cursor: pointer;
+        }
+
+        .message-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .message-card.unread {
+            border-left-color: #2563eb;
+            background: linear-gradient(135deg, #eff6ff 0%, white 100%);
+        }
+
+        .message-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .message-sender {
+            flex: 1;
+        }
+
+        .message-sender h3 {
+            font-size: 1.1rem;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .message-sender p {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .message-meta {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .message-date {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .message-id {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            font-family: monospace;
+        }
+
+        .unread-badge {
+            display: inline-block;
+            background: #dc2626;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            margin-left: 0.5rem;
+        }
+
+        .message-subject {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-preview {
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .message-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .message-tag {
+            background: #f3f4f6;
+            color: #4b5563;
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .message-tag.issue-type {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .message-tag.device {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #9ca3af;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Message Detail Modal */
+        .message-detail-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .message-detail-modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-detail-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .message-detail-header h2 {
+            font-size: 1.25rem;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .message-detail-close {
+            background: #f3f4f6;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .message-detail-close:hover {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .message-detail-body {
+            padding: 1.5rem;
+        }
+
+        .message-detail-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            background: #f9fafb;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item span {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .message-full-content {
+            background: #f9fafb;
+            padding: 1.25rem;
+            border-radius: 12px;
+            border-left: 4px solid #2563eb;
+        }
+
+        .message-full-content h4 {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .message-full-content p {
+            color: #374151;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .message-detail-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .messages-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .messages-stats {
+                justify-content: center;
+            }
+
+            .message-card-header {
+                flex-direction: column;
+            }
+
+            .message-meta {
+                text-align: left;
+            }
+
+            .message-detail-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Confirmation Modal */
+        .confirm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 1rem;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .confirm-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        .confirm-modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #fef3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+
+        .confirm-modal-icon svg {
+            color: #d97706;
+        }
+
+        .confirm-modal-icon.danger {
+            background: #fee2e2;
+        }
+
+        .confirm-modal-icon.danger svg {
+            color: #dc2626;
+        }
+
+        .confirm-modal h3 {
+            font-size: 1.25rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .confirm-modal p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .confirm-modal-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .confirm-modal-buttons .btn {
+            min-width: 100px;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <section class="messages-hero">
+        <div class="container">
+            <h1>Customer Messages</h1>
+            <p>View and manage inquiries from your website</p>
+        </div>
+    </section>
+
+    <section class="messages-content">
+        <div class="container">
+            <div class="messages-header">
+                <div class="messages-stats">
+                    <div class="stat-item">
+                        <div class="number" id="totalCount">0</div>
+                        <div class="label">Total Messages</div>
+                    </div>
+                    <div class="stat-item unread">
+                        <div class="number" id="unreadCount">0</div>
+                        <div class="label">Unread</div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="markAllAsRead()">Mark All as Read</button>
+                    <button class="btn btn-danger" onclick="clearAllMessages()" style="margin-left: 0.5rem;">Clear All</button>
+                </div>
+            </div>
+
+            <div id="messagesList" class="messages-list">
+                <!-- Messages will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Message Detail Modal -->
+    <div id="messageDetailModal" class="message-detail-overlay" style="display: none;">
+        <div class="message-detail-modal">
+            <div class="message-detail-header">
+                <div>
+                    <h2 id="detailSubject">Subject</h2>
+                    <p id="detailMeta" style="color: #6b7280; font-size: 0.85rem;"></p>
+                </div>
+                <button class="message-detail-close" onclick="closeDetailModal()">×</button>
+            </div>
+            <div class="message-detail-body">
+                <div class="message-detail-info">
+                    <div class="info-item">
+                        <label>From</label>
+                        <span id="detailName"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>Phone</label>
+                        <span id="detailPhone"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>Email</label>
+                        <span id="detailEmail"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>Issue Type</label>
+                        <span id="detailIssueType"></span>
+                    </div>
+                    <div class="info-item" style="grid-column: span 2;">
+                        <label>Device</label>
+                        <span id="detailDevice"></span>
+                    </div>
+                </div>
+                <div class="message-full-content">
+                    <h4>Message</h4>
+                    <p id="detailMessage"></p>
+                </div>
+            </div>
+            <div class="message-detail-footer">
+                <button class="btn-delete" id="deleteBtn">Delete Message</button>
+                <button class="btn btn-primary" onclick="closeDetailModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="confirm-modal-overlay" style="display: none;">
+        <div class="confirm-modal">
+            <div class="confirm-modal-icon" id="confirmIcon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h3 id="confirmTitle">Confirm Action</h3>
+            <p id="confirmMessage">Are you sure you want to proceed?</p>
+            <div class="confirm-modal-buttons">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+                <button class="btn btn-danger" id="confirmActionBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check if user is admin
+        function checkAdminAccess() {
+            const session = getUserSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            if (session.role?.toUpperCase() !== 'ADMIN') {
+                alert('Access denied. Admin only.');
+                window.location.href = 'dashboard.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Load messages
+        function loadMessages() {
+            if (!checkAdminAccess()) return;
+
+            const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            const container = document.getElementById('messagesList');
+            
+            // Update stats
+            document.getElementById('totalCount').textContent = messages.length;
+            document.getElementById('unreadCount').textContent = messages.filter(m => !m.isRead).length;
+
+            if (messages.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <h3>No Messages Yet</h3>
+                        <p>Customer inquiries from the contact form will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            messages.forEach(msg => {
+                const date = new Date(msg.createdAt);
+                const formattedDate = date.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                html += `
+                    <div class="message-card ${msg.isRead ? '' : 'unread'}" onclick="viewMessage(${msg.id})">
+                        <div class="message-card-header">
+                            <div class="message-sender">
+                                <h3>${msg.name} ${msg.isRead ? '' : '<span class="unread-badge">NEW</span>'}</h3>
+                                <p>${msg.email} | ${msg.phone}</p>
+                            </div>
+                            <div class="message-meta">
+                                <div class="message-date">${formattedDate}</div>
+                                <div class="message-id">MSG-${msg.id}</div>
+                            </div>
+                        </div>
+                        <div class="message-subject">${msg.subject}</div>
+                        <div class="message-preview">${msg.message}</div>
+                        <div class="message-tags">
+                            ${msg.issueType !== 'Not specified' ? `<span class="message-tag issue-type">${msg.issueType}</span>` : ''}
+                            ${msg.device !== 'Not specified' ? `<span class="message-tag device">${msg.device}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // View message detail
+        function viewMessage(id) {
+            const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            const msg = messages.find(m => m.id === id);
+            
+            if (!msg) return;
+
+            // Mark as read
+            msg.isRead = true;
+            localStorage.setItem('contactMessages', JSON.stringify(messages));
+
+            // Populate modal
+            const date = new Date(msg.createdAt);
+            document.getElementById('detailSubject').textContent = msg.subject;
+            document.getElementById('detailMeta').textContent = `MSG-${msg.id} | ${date.toLocaleString()}`;
+            document.getElementById('detailName').textContent = msg.name;
+            document.getElementById('detailPhone').textContent = msg.phone;
+            document.getElementById('detailEmail').textContent = msg.email;
+            document.getElementById('detailIssueType').textContent = msg.issueType;
+            document.getElementById('detailDevice').textContent = msg.device;
+            document.getElementById('detailMessage').textContent = msg.message;
+
+            document.getElementById('deleteBtn').onclick = () => showDeleteConfirm(id);
+
+            document.getElementById('messageDetailModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Refresh list to update read status
+            loadMessages();
+            
+            // Update nav badge
+            if (typeof loadMessagesBadgeCount === 'function') {
+                loadMessagesBadgeCount();
+            }
+        }
+
+        function closeDetailModal() {
+            document.getElementById('messageDetailModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // Custom Confirmation Modal Functions
+        let confirmCallback = null;
+
+        function showConfirmModal(title, message, callback, isDanger = false) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            
+            const icon = document.getElementById('confirmIcon');
+            if (isDanger) {
+                icon.classList.add('danger');
+            } else {
+                icon.classList.remove('danger');
+            }
+            
+            confirmCallback = callback;
+            document.getElementById('confirmModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            if (document.getElementById('messageDetailModal').style.display !== 'flex') {
+                document.body.style.overflow = '';
+            }
+            confirmCallback = null;
+        }
+
+        document.getElementById('confirmActionBtn').addEventListener('click', function() {
+            if (confirmCallback) {
+                confirmCallback();
+            }
+            closeConfirmModal();
+        });
+
+        // Close confirm modal on overlay click
+        document.getElementById('confirmModal').addEventListener('click', function(e) {
+            if (e.target === this) closeConfirmModal();
+        });
+
+        function showDeleteConfirm(id) {
+            showConfirmModal(
+                'Delete Message',
+                'Are you sure you want to delete this message? This action cannot be undone.',
+                () => deleteMessage(id),
+                true
+            );
+        }
+
+        function deleteMessage(id) {
+            let messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            messages = messages.filter(m => m.id !== id);
+            localStorage.setItem('contactMessages', JSON.stringify(messages));
+
+            closeDetailModal();
+            loadMessages();
+            showNotification('Message deleted', 'success');
+            
+            // Update nav badge
+            if (typeof loadMessagesBadgeCount === 'function') {
+                loadMessagesBadgeCount();
+            }
+        }
+
+        function markAllAsRead() {
+            const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            messages.forEach(m => m.isRead = true);
+            localStorage.setItem('contactMessages', JSON.stringify(messages));
+            loadMessages();
+            showNotification('All messages marked as read', 'success');
+            
+            // Update nav badge
+            if (typeof loadMessagesBadgeCount === 'function') {
+                loadMessagesBadgeCount();
+            }
+        }
+
+        function clearAllMessages() {
+            showConfirmModal(
+                'Clear All Messages',
+                'Are you sure you want to delete ALL messages? This action cannot be undone.',
+                () => {
+                    localStorage.setItem('contactMessages', JSON.stringify([]));
+                    loadMessages();
+                    showNotification('All messages cleared', 'success');
+                    
+                    // Update nav badge
+                    if (typeof loadMessagesBadgeCount === 'function') {
+                        loadMessagesBadgeCount();
+                    }
+                },
+                true
+            );
+        }
+
+        // Close modal on overlay click
+        document.getElementById('messageDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDetailModal();
+        });
+
+        // Load header and footer
+        fetch('components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+                updateHeaderForAuth();
+                if (typeof updateRegisterLinkVisibility === 'function') {
+                    updateRegisterLinkVisibility();
+                }
+            });
+
+        fetch('components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-container').innerHTML = data);
+
+        // Initialize
+        loadMessages();
+    </script>
+</body>
+</html>

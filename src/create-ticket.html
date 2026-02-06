@@ -114,6 +114,14 @@
                         <h2>Repair Information</h2>
                         
                         <div class="form-group">
+                            <label for="technicianId">Assigned Technician *</label>
+                            <select id="technicianId" name="technicianId" required>
+                                <option value="">Select Technician...</option>
+                                <!-- Options will be loaded dynamically -->
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
                             <label for="priority">Priority *</label>
                             <select id="priority" name="priority" required>
                                 <option value="">Select Priority...</option>
@@ -146,8 +154,15 @@
 
     <div id="footer-container"></div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/ticket.js"></script>
+    <script src="js/ticket.new.js"></script>
     <script>
         // Load header and footer
         fetch('components/header.html')
@@ -155,6 +170,9 @@
             .then(data => {
                 document.getElementById('header-container').innerHTML = data;
                 updateHeaderForAuth();
+                if (typeof updateRegisterLinkVisibility === 'function') {
+                    updateRegisterLinkVisibility();
+                }
             });
 
         fetch('components/footer.html')
@@ -163,9 +181,40 @@
 
         // Check authentication on page load
         checkAuthentication();
+        
+        // Check if user has permission to create tickets (Admin/Technician only)
+        const session = getUserSession();
+        if (session && session.role?.toUpperCase() === 'CUSTOMER') {
+            alert('Customers cannot create tickets. Please use the Repair Tracker to check your ticket status.');
+            window.location.href = 'tracker.html';
+        }
 
         // Set minimum date to today
         document.getElementById('estimatedDate').min = new Date().toISOString().split('T')[0];
+        
+        // Load technicians dropdown
+        async function loadTechnicians() {
+            try {
+                const response = await api.get('/users/technicians');
+                const techSelect = document.getElementById('technicianId');
+                
+                if (response.success && response.data) {
+                    response.data.forEach(tech => {
+                        const option = document.createElement('option');
+                        option.value = tech.id;
+                        option.textContent = `${tech.firstName} ${tech.lastName}`;
+                        techSelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to load technicians:', error);
+            }
+        }
+        
+        // Load technicians when page loads
+        if (session && ['ADMIN', 'TECHNICIAN'].includes(session.role?.toUpperCase())) {
+            loadTechnicians();
+        }
     </script>
 </body>
 </html>

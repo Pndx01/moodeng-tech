@@ -3,7 +3,7 @@
         <div class="header-content">
             <div class="logo">
                 <h1>Moodeng Tech</h1>
-                <p class="tagline">by R&F Incorporated</p>
+                <p class="tagline">by R&F</p>
             </div>
             <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
@@ -11,7 +11,37 @@
                 <a href="services.html" class="nav-link">Services</a>
                 <a href="tracker.html" class="nav-link">Repair Tracker</a>
                 <a href="contact.html" class="nav-link">Contact</a>
+                <a href="register.html" class="nav-link" id="register-link">Register</a>
             </nav>
         </div>
     </div>
 </header>
+
+<script>
+// Function to hide register link if user is logged in
+function updateRegisterLinkVisibility() {
+    const userSession = localStorage.getItem('userSession');
+    const registerLink = document.getElementById('register-link');
+    
+    console.log('Checking register link visibility:', { 
+        hasSession: !!userSession, 
+        linkExists: !!registerLink 
+    });
+    
+    if (registerLink) {
+        if (userSession) {
+            registerLink.style.display = 'none';
+            console.log('Register link hidden');
+        } else {
+            registerLink.style.display = '';
+            console.log('Register link shown');
+        }
+    }
+}
+
+// Run immediately with a small delay to ensure DOM is ready
+setTimeout(updateRegisterLinkVisibility, 0);
+
+// Make function globally available
+window.updateRegisterLinkVisibility = updateRegisterLinkVisibility;
+</script>

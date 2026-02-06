@@ -12,15 +12,24 @@
 
     <section class="dashboard-hero">
         <div class="container">
-            <h1>All Repair Tickets</h1>
-            <p>Manage and view all repair tickets</p>
+            <h1 id="pageTitle">All Repair Tickets</h1>
+            <p id="pageSubtitle">Manage and view all repair tickets</p>
         </div>
     </section>
 
     <section class="dashboard-content">
         <div class="container">
-            <!-- Filter Options -->
-            <div class="dashboard-card">
+            <!-- Search Box for Customers -->
+            <div class="dashboard-card" id="searchSection" style="display: none;">
+                <h2>Search Your Tickets</h2>
+                <div class="search-box" style="display: flex; gap: 10px;">
+                    <input type="text" id="searchInput" placeholder="Enter your email or ticket ID" style="flex: 1; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem;">
+                    <button onclick="searchCustomerTickets()" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+            
+            <!-- Filter Options (Admin/Technician only) -->
+            <div class="dashboard-card" id="filterSection">
                 <h2>Filter Tickets</h2>
                 <div class="filter-options">
                     <button class="btn btn-secondary filter-btn active" data-status="all">All Tickets</button>
@@ -35,7 +44,7 @@
             <!-- Tickets List -->
             <div class="dashboard-card full-width">
                 <h2>Tickets</h2>
-                <div id="allTicketsContainer">
+                <div id="ticketsContainer">
                     <p class="loading">Loading tickets...</p>
                 </div>
             </div>
@@ -44,8 +53,16 @@
 
     <div id="footer-container"></div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/socket.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/ticket.js"></script>
+    <script src="js/ticket.new.js"></script>
     <script src="js/dashboard.js"></script>
     <script>
         // Load header and footer
@@ -54,6 +71,9 @@
             .then(data => {
                 document.getElementById('header-container').innerHTML = data;
                 updateHeaderForAuth();
+                if (typeof updateRegisterLinkVisibility === 'function') {
+                    updateRegisterLinkVisibility();
+                }
             });
 
         fetch('components/footer.html')
@@ -63,8 +83,55 @@
         // Check authentication on page load
         checkAuthentication();
 
-        // Load all tickets
-        loadAllTickets();
+        // Configure page based on user role
+        const session = getUserSession();
+        const role = session?.role?.toUpperCase();
+        
+        if (role === 'CUSTOMER') {
+            // Customer view: show search, hide filters
+            document.getElementById('pageTitle').textContent = 'My Tickets';
+            document.getElementById('pageSubtitle').textContent = 'Search and view your repair tickets';
+            document.getElementById('searchSection').style.display = 'block';
+            document.getElementById('filterSection').style.display = 'none';
+            
+            // Pre-fill search with customer email
+            document.getElementById('searchInput').value = session.email || '';
+            
+            // Auto-search if email exists
+            if (session.email) {
+                searchCustomerTickets();
+            }
+        } else {
+            // Admin/Technician view: show all tickets with filters
+            document.getElementById('filterSection').style.display = 'block';
+            // Use API-based loadAllTickets from ticket.new.js
+            if (typeof loadAllTickets === 'function') {
+                loadAllTickets();
+            }
+        }
+
+        // Search function for customers (API-based)
+        async function searchCustomerTickets() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            const container = document.getElementById('ticketsContainer');
+            
+            if (!searchTerm) {
+                container.innerHTML = '<div class="no-tickets"><p>Please enter your email or ticket ID to search.</p></div>';
+                return;
+            }
+            
+            try {
+                const response = await api.get(`${API_CONFIG.ENDPOINTS.TICKETS}?search=${encodeURIComponent(searchTerm)}`);
+                if (response.success && response.data.tickets.length > 0) {
+                    renderTicketsList(response.data.tickets, response.data.pagination);
+                } else {
+                    container.innerHTML = '<div class="no-tickets"><p>No tickets found for this email or ticket ID.</p></div>';
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                container.innerHTML = '<div class="no-tickets"><p>Error searching tickets. Please try again.</p></div>';
+            }
+        }
 
         // Filter functionality
         document.addEventListener('click', function(e) {
@@ -72,95 +139,322 @@
                 document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
                 const status = e.target.dataset.status;
-                filterTickets(status);
+                filterTicketsByStatus(status);
             }
         });
 
-        function loadAllTickets(filter = 'all') {
-            const tickets = getAllTickets();
-            const container = document.getElementById('allTicketsContainer');
-            
-            if (!container) return;
-
-            let filteredTickets = tickets;
-            if (filter !== 'all') {
-                filteredTickets = tickets.filter(t => t.status === filter);
+        // Filter tickets by status using API
+        function filterTicketsByStatus(status) {
+            if (status === 'all') {
+                loadAllTickets();
+            } else {
+                // Map frontend status to API status
+                const statusMap = {
+                    'received': 'RECEIVED',
+                    'diagnosed': 'DIAGNOSED',
+                    'parts-ordered': 'WAITING_PARTS',
+                    'repair-progress': 'IN_PROGRESS',
+                    'ready': 'READY'
+                };
+                loadAllTickets({ status: statusMap[status] || status.toUpperCase() });
             }
-
-            if (filteredTickets.length === 0) {
-                container.innerHTML = `
-                    <div class="no-tickets">
-                        <p>No tickets found${filter !== 'all' ? ' with this status' : ''}.</p>
-                        <a href="create-ticket.html" class="btn btn-primary">Create New Ticket</a>
-                    </div>
-                `;
-                return;
-            }
-
-            // Sort by creation date (newest first)
-            filteredTickets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-            let html = '<div class="tickets-list">';
-            
-            filteredTickets.forEach(ticket => {
-                const statusClass = ticket.status.replace(/ /g, '-');
-                const statusText = formatStatus(ticket.status);
-                
-                html += `
-                    <div class="ticket-item">
-                        <div class="ticket-id" style="cursor: pointer;" onclick="viewTicketDetails('${ticket.id}')">${ticket.id}</div>
-                        <div class="ticket-info">
-                            <h4>${ticket.firstName} ${ticket.lastName}</h4>
-                            <p><strong>Device:</strong> ${ticket.laptopModel} (S/N: ${ticket.serialNumber})</p>
-                            <p><strong>Issue:</strong> ${ticket.issue.substring(0, 80)}${ticket.issue.length > 80 ? '...' : ''}</p>
-                            <p><strong>Priority:</strong> ${ticket.priority.toUpperCase()} | <strong>Created:</strong> ${formatDate(ticket.createdAt)}</p>
-                            <p><strong>Contact:</strong> ${ticket.phone} | ${ticket.email}</p>
-                        </div>
-                        <div>
-                            <div class="ticket-status ${statusClass}">${statusText}</div>
-                            <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-direction: column;">
-                                <button onclick="updateStatus('${ticket.id}')" class="btn btn-primary" style="font-size: 0.85rem; padding: 0.5rem;">Update Status</button>
-                                <button onclick="viewOnTracker('${ticket.id}')" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.5rem;">View Tracker</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            container.innerHTML = html;
-        }
-
-        function filterTickets(status) {
-            loadAllTickets(status);
-        }
-
-        function viewTicketDetails(ticketId) {
-            alert(`Ticket Details for ${ticketId}\n\nClick "View Tracker" to see full details on the tracker page.`);
         }
 
         function viewOnTracker(ticketId) {
             window.location.href = `tracker.html?id=${ticketId}`;
         }
 
+        // updateStatus now uses the API-based modal from ticket.new.js
         function updateStatus(ticketId) {
-            const newStatus = prompt('Enter new status:\n- received\n- diagnosed\n- parts-ordered\n- repair-progress\n- ready');
-            
-            if (newStatus) {
-                const validStatuses = ['received', 'diagnosed', 'parts-ordered', 'repair-progress', 'ready'];
-                if (validStatuses.includes(newStatus)) {
-                    const message = prompt('Enter update message (optional):') || `Status updated to ${newStatus}`;
-                    updateTicketStatus(ticketId, newStatus, message);
-                    showNotification('Ticket status updated!', 'success');
-                    loadAllTickets();
-                } else {
-                    showNotification('Invalid status!', 'error');
-                }
+            // showUpdateStatusModal is defined in ticket.new.js
+            if (typeof showUpdateStatusModal === 'function') {
+                showUpdateStatusModal(ticketId, 'RECEIVED');
+            } else {
+                alert('Update status feature is loading. Please try again.');
             }
         }
+        
+        // Legacy modal function kept for compatibility
+        function showStatusModal(ticketId, currentStatus) {
+            const statuses = [
+                { value: 'received', label: 'Received', icon: '', color: '#6b7280' },
+                { value: 'diagnosed', label: 'Diagnosed', icon: '', color: '#8b5cf6' },
+                { value: 'parts-ordered', label: 'Parts Ordered', icon: '', color: '#f59e0b' },
+                { value: 'repair-progress', label: 'In Progress', icon: '', color: '#3b82f6' },
+                { value: 'ready', label: 'Ready for Pickup', icon: '', color: '#10b981' }
+            ];
+            
+            const modal = document.createElement('div');
+            modal.className = 'status-modal-overlay';
+            modal.onclick = (e) => {
+                if (e.target === modal) closeStatusModal();
+            };
+            
+            modal.innerHTML = `
+                <div class="status-modal">
+                    <div class="status-modal-header">
+                        <h3>Update Ticket Status</h3>
+                        <button class="status-modal-close" onclick="closeStatusModal()">×</button>
+                    </div>
+                    <div class="status-modal-body">
+                        <div class="status-options">
+                            ${statuses.map(s => `
+                                <label class="status-option ${s.value === currentStatus ? 'selected' : ''}" data-status="${s.value}">
+                                    <input type="radio" name="ticketStatus" value="${s.value}" ${s.value === currentStatus ? 'checked' : ''}>
+                                    <span class="status-icon">${s.icon}</span>
+                                    <span class="status-label">${s.label}</span>
+                                    <span class="status-check"></span>
+                                </label>
+                            `).join('')}
+                        </div>
+                        <div class="form-group" style="margin-top: 1.5rem;">
+                            <label for="statusNote" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151;">
+                                Add a Note (optional)
+                            </label>
+                            <textarea id="statusNote" placeholder="e.g., Waiting for replacement screen to arrive..." 
+                                style="width: 100%; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 12px; 
+                                       font-size: 1rem; resize: vertical; min-height: 80px; font-family: inherit;
+                                       transition: border-color 0.3s ease;"></textarea>
+                        </div>
+                    </div>
+                    <div class="status-modal-footer">
+                        <button class="btn btn-secondary" onclick="closeStatusModal()">Cancel</button>
+                        <button class="btn btn-primary" id="updateStatusBtn" onclick="submitStatusUpdate('${ticketId}')">
+                            <span class="btn-text">Update Status</span>
+                            <span class="btn-loading" style="display: none;">
+                                <span class="spinner"></span> Updating...
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            
+            // Add click handlers for status options
+            modal.querySelectorAll('.status-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    modal.querySelectorAll('.status-option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    this.querySelector('input').checked = true;
+                });
+            });
+            
+            // Focus on textarea
+            setTimeout(() => {
+                document.getElementById('statusNote').focus();
+            }, 100);
+        }
+        
+        function closeStatusModal() {
+            const modal = document.querySelector('.status-modal-overlay');
+            if (modal) {
+                modal.classList.add('closing');
+                setTimeout(() => {
+                    modal.remove();
+                    document.body.style.overflow = '';
+                }, 200);
+            }
+        }
+        
+        // Legacy submitStatusUpdate removed - using the one from ticket.new.js
     </script>
 
     <style>
+        /* Status Update Modal Styles */
+        .status-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .status-modal-overlay.closing {
+            animation: fadeOut 0.2s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .status-modal {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 480px;
+            animation: slideUp 0.3s ease;
+            overflow: hidden;
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .status-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 1.5rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .status-modal-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: #1f2937;
+        }
+        
+        .status-modal-close {
+            background: #f3f4f6;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .status-modal-close:hover {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+        
+        .status-modal-body {
+            padding: 1.5rem;
+        }
+        
+        .status-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .status-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fafafa;
+        }
+        
+        .status-option:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .status-option.selected {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        
+        .status-option input {
+            display: none;
+        }
+        
+        .status-icon {
+            font-size: 1.5rem;
+        }
+        
+        .status-label {
+            flex: 1;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .status-check {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+        
+        .status-option.selected .status-check {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        
+        .status-modal-footer {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 1.5rem 1.5rem;
+            justify-content: flex-end;
+        }
+        
+        .status-modal-footer .btn {
+            padding: 0.875rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+        
+        .status-modal-footer .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            min-width: 140px;
+        }
+        
+        .btn-loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        #statusNote:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
         .filter-options {
             display: flex;
             gap: 0.75rem;
@@ -176,6 +470,31 @@
             background-color: #2563eb;
             color: white;
             border-color: #2563eb;
+        }
+        
+        @media (max-width: 480px) {
+            .status-modal {
+                border-radius: 16px 16px 0 0;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                max-width: none;
+                animation: slideUpMobile 0.3s ease;
+            }
+            
+            @keyframes slideUpMobile {
+                from { transform: translateY(100%); }
+                to { transform: translateY(0); }
+            }
+            
+            .status-modal-footer {
+                flex-direction: column-reverse;
+            }
+            
+            .status-modal-footer .btn {
+                width: 100%;
+            }
         }
     </style>
 </body>

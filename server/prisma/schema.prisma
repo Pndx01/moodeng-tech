@@ -1,0 +1,197 @@
+// Prisma Schema for Moodeng Tech Laptop Repair Service
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and authorization
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  username     String?   @unique
+  password     String
+  firstName    String    @map("first_name")
+  lastName     String    @map("last_name")
+  phone        String?
+  role         UserRole  @default(CUSTOMER)
+  isActive     Boolean   @default(true) @map("is_active")
+  isApproved   Boolean   @default(false) @map("is_approved")
+  isRejected   Boolean   @default(false) @map("is_rejected")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  
+  // Relations
+  tickets          Ticket[]       @relation("CustomerTickets")
+  assignedTickets  Ticket[]       @relation("TechnicianTickets")
+  refreshTokens    RefreshToken[]
+  notifications    Notification[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  CUSTOMER
+  TECHNICIAN
+  ADMIN
+}
+
+// Refresh token for JWT authentication
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique @db.VarChar(500)
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+// Repair ticket model
+model Ticket {
+  id              String       @id @default(uuid())
+  ticketNumber    String       @unique @map("ticket_number")
+  
+  // Customer info
+  customerId      String       @map("customer_id")
+  customerName    String       @map("customer_name")
+  customerEmail   String       @map("customer_email")
+  customerPhone   String       @map("customer_phone")
+  
+  // Device info
+  deviceType      String       @map("device_type")
+  deviceBrand     String       @map("device_brand")
+  deviceModel     String       @map("device_model")
+  serialNumber    String?      @map("serial_number")
+  
+  // Issue details
+  issueDescription String      @db.Text @map("issue_description")
+  priority         Priority    @default(MEDIUM)
+  status           TicketStatus @default(RECEIVED)
+  
+  // Assignment
+  technicianId    String?      @map("technician_id")
+  
+  // Pricing
+  estimatedCost   Decimal?     @db.Decimal(10, 2) @map("estimated_cost")
+  finalCost       Decimal?     @db.Decimal(10, 2) @map("final_cost")
+  
+  // Warranty
+  warrantyDays    Int?         @map("warranty_days")
+  warrantyExpires DateTime?    @map("warranty_expires")
+  
+  // Dates
+  estimatedCompletion DateTime? @map("estimated_completion")
+  completedAt     DateTime?    @map("completed_at")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+  
+  // Relations
+  customer        User         @relation("CustomerTickets", fields: [customerId], references: [id])
+  technician      User?        @relation("TechnicianTickets", fields: [technicianId], references: [id])
+  timeline        TicketTimeline[]
+  photos          TicketPhoto[]
+  notes           TicketNote[]
+
+  @@index([status])
+  @@index([customerId])
+  @@index([technicianId])
+  @@map("tickets")
+}
+
+enum TicketStatus {
+  RECEIVED
+  DIAGNOSED
+  WAITING_PARTS
+  IN_PROGRESS
+  READY
+  COMPLETED
+  RETURNED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+// Timeline entries for ticket status changes
+model TicketTimeline {
+  id          String       @id @default(uuid())
+  ticketId    String       @map("ticket_id")
+  status      TicketStatus
+  description String?
+  createdAt   DateTime     @default(now()) @map("created_at")
+  createdBy   String?      @map("created_by")
+  
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@map("ticket_timeline")
+}
+
+// Photos attached to tickets
+model TicketPhoto {
+  id        String     @id @default(uuid())
+  ticketId  String     @map("ticket_id")
+  filename  String
+  path      String
+  mimeType  String     @map("mime_type")
+  size      Int
+  stage     PhotoStage @default(RECEIVED)
+  createdAt DateTime   @default(now()) @map("created_at")
+  
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@map("ticket_photos")
+}
+
+enum PhotoStage {
+  RECEIVED
+  DURING_REPAIR
+  REPAIRED
+}
+
+// Internal notes on tickets
+model TicketNote {
+  id        String   @id @default(uuid())
+  ticketId  String   @map("ticket_id")
+  content   String   @db.Text
+  isPrivate Boolean  @default(true) @map("is_private")
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @map("created_by")
+  
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@map("ticket_notes")
+}
+
+// User notifications
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  title     String
+  message   String   @db.Text
+  type      NotificationType
+  isRead    Boolean  @default(false) @map("is_read")
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  TICKET_CREATED
+  TICKET_UPDATED
+  TICKET_COMPLETED
+  SYSTEM
+}

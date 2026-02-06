@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Moodeng Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -22,26 +25,28 @@
         <div class="container">
             <div class="contact-grid">
                 <div class="contact-info-box">
-                    <h3>📞 Phone & Messaging</h3>
+                    <h3>Phone & Messaging</h3>
+                    <p><strong>Phone:</strong> +639938493323</p>
                     <p><strong>Facebook:</strong> Moodeng Tech</p>
-                    <p>Message us anytime - we'll get back to you ASAP</p>
+                    <p>Call or message us anytime!</p>
                 </div>
                 <div class="contact-info-box">
-                    <h3>⏰ Business Hours</h3>
-                    <p><strong>Monday - Sunday</strong></p>
-                    <p><strong>8:00 AM - 10:00 PM</strong></p>
-                    <p>We're open 7 days a week for your convenience</p>
+                    <h3>Business Hours</h3>
+                    <p><strong>Monday - Saturday</strong></p>
+                    <p><strong>7:00 AM - 1:00 AM</strong></p>
+                    <p>Closed on Sundays</p>
                 </div>
                 <div class="contact-info-box">
-                    <h3>📍 Visit Us</h3>
-                    <p><strong>Moodeng Tech</strong></p>
-                    <p>R&F Incorporated</p>
-                    <p>Your local laptop repair experts</p>
+                    <h3>Visit Us</h3>
+                    <p><strong>Moodeng Tech by R&F Inc.</strong></p>
+                    <p>Better Living Subdivision</p>
+                    <p>Parañaque City, Metro Manila</p>
                 </div>
                 <div class="contact-info-box">
-                    <h3>📧 Email Updates</h3>
-                    <p>You'll receive email updates on your repair progress</p>
-                    <p>SMS notifications also available</p>
+                    <h3>Stay Updated</h3>
+                    <p>Email updates on your repair progress</p>
+                    <p>SMS notifications available</p>
+                    <p>Real-time tracking via our website</p>
                 </div>
             </div>
         </div>
@@ -52,7 +57,7 @@
         <div class="container">
             <div class="form-wrapper">
                 <h2>Send Us a Message</h2>
-                <form id="contactForm" class="contact-form">
+                <form id="contactForm" class="contact-form" novalidate>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
@@ -64,28 +69,27 @@
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject *</label>
-                            <input type="text" id="subject" name="subject" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="issueType">Issue Type</label>
-                        <select id="issueType" name="issueType">
+                        <label for="issueType">Issue Type *</label>
+                        <select id="issueType" name="issueType" required onchange="toggleCustomIssue()">
                             <option value="">Select an issue type...</option>
-                            <option value="hardware">Hardware Repair</option>
-                            <option value="software">Software Issue</option>
-                            <option value="data">Data Recovery</option>
-                            <option value="maintenance">Preventive Maintenance</option>
-                            <option value="upgrade">Upgrade/Performance</option>
+                            <option value="Hardware Repair">Hardware Repair</option>
+                            <option value="Software Issue">Software Issue</option>
+                            <option value="Data Recovery">Data Recovery</option>
+                            <option value="Preventive Maintenance">Preventive Maintenance</option>
+                            <option value="Upgrade/Performance">Upgrade/Performance</option>
                             <option value="other">Other</option>
                         </select>
+                    </div>
+
+                    <div class="form-group" id="customIssueGroup" style="display: none;">
+                        <label for="customIssue">Please specify your issue *</label>
+                        <input type="text" id="customIssue" name="customIssue" placeholder="Describe your issue type...">
                     </div>
 
                     <div class="form-group">
@@ -116,19 +120,19 @@
             <h2>Why Contact Moodeng Tech?</h2>
             <div class="reasons-grid">
                 <div class="reason-card">
-                    <h3>🚀 Quick Response</h3>
+                    <h3>Quick Response</h3>
                     <p>We respond to inquiries quickly during business hours</p>
                 </div>
                 <div class="reason-card">
-                    <h3>💬 Expert Advice</h3>
+                    <h3>Expert Advice</h3>
                     <p>Get professional advice on your laptop issues before bringing it in</p>
                 </div>
                 <div class="reason-card">
-                    <h3>📋 Schedule Service</h3>
+                    <h3>Schedule Service</h3>
                     <p>Arrange drop-off times and discuss your repair needs</p>
                 </div>
                 <div class="reason-card">
-                    <h3>❓ Ask Questions</h3>
+                    <h3>Ask Questions</h3>
                     <p>Have questions about our services? We're here to help</p>
                 </div>
             </div>
@@ -142,7 +146,7 @@
             <div class="faq-items">
                 <div class="faq-item">
                     <h4>What's the best way to contact you?</h4>
-                    <p>Message us on Facebook (Moodeng Tech) for the quickest response, or fill out our contact form above. We check messages regularly during business hours (8 AM - 10 PM).</p>
+                    <p>Call us at +639938493323 or message us on Facebook (Moodeng Tech) for the quickest response. You can also fill out our contact form above. We check messages regularly during business hours (7 AM - 10 PM).</p>
                 </div>
                 <div class="faq-item">
                     <h4>How quickly will you respond?</h4>
@@ -150,7 +154,7 @@
                 </div>
                 <div class="faq-item">
                     <h4>Can I drop off my laptop without an appointment?</h4>
-                    <p>Yes! We accept walk-ins during business hours (8 AM - 10 PM, daily). However, calling ahead is appreciated so we can prioritize your service.</p>
+                    <p>Yes! We accept walk-ins during business hours (7 AM - 1 AM, daily). However, calling ahead is appreciated so we can prioritize your service.</p>
                 </div>
                 <div class="faq-item">
                     <h4>What information should I provide about my laptop?</h4>
@@ -170,6 +174,116 @@
 
     <div id="footer-container"></div>
 
+    <!-- Success Modal -->
+    <div id="successModal" class="message-modal-overlay" style="display: none;">
+        <div class="message-modal">
+            <div class="message-modal-icon success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h3>Message Sent Successfully!</h3>
+            <p id="successMessageText">Thank you for contacting us. We'll get back to you soon.</p>
+            <div class="message-modal-details" id="modalDetails"></div>
+            <button class="btn btn-primary" onclick="closeSuccessModal()">Got It</button>
+        </div>
+    </div>
+
+    <style>
+        .message-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .message-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .message-modal-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .message-modal-icon.success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #059669;
+        }
+
+        .message-modal h3 {
+            color: #1f2937;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .message-modal p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .message-modal-details {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .message-modal-details p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+
+        .message-modal-details strong {
+            color: #1f2937;
+        }
+
+        .message-modal .btn {
+            min-width: 150px;
+            padding: 0.875rem 2rem;
+        }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
     <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
     <script>
@@ -179,21 +293,98 @@
             .then(data => {
                 document.getElementById('header-container').innerHTML = data;
                 updateHeaderForAuth();
+                if (typeof updateRegisterLinkVisibility === 'function') {
+                    updateRegisterLinkVisibility();
+                }
             });
 
         fetch('components/footer.html')
             .then(response => response.text())
             .then(data => document.getElementById('footer-container').innerHTML = data);
 
+        // Toggle custom issue input when "Other" is selected
+        function toggleCustomIssue() {
+            const issueType = document.getElementById('issueType').value;
+            const customGroup = document.getElementById('customIssueGroup');
+            const customInput = document.getElementById('customIssue');
+            
+            if (issueType === 'other') {
+                customGroup.style.display = 'block';
+                customInput.required = true;
+            } else {
+                customGroup.style.display = 'none';
+                customInput.required = false;
+                customInput.value = '';
+            }
+        }
+
         // Handle contact form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const name = document.getElementById('name').value;
-            alert(`Thank you, ${name}! Your message has been received. We'll contact you soon through the information you provided.`);
+            // Get issue type - use custom input if "other" is selected
+            let issueType = document.getElementById('issueType').value;
+            if (issueType === 'other') {
+                issueType = document.getElementById('customIssue').value || 'Other';
+            }
+            
+            const formData = {
+                id: Date.now(),
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                subject: issueType, // Use issue type as subject
+                issueType: issueType,
+                device: document.getElementById('device').value || 'Not specified',
+                message: document.getElementById('message').value,
+                createdAt: new Date().toISOString(),
+                isRead: false
+            };
+
+            // Save to localStorage for admin to view
+            const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            messages.unshift(formData);
+            localStorage.setItem('contactMessages', JSON.stringify(messages));
+
+            // Show success modal
+            showSuccessModal(formData);
             
             // Reset form
             this.reset();
+            // Hide custom issue input after reset
+            document.getElementById('customIssueGroup').style.display = 'none';
+        });
+
+        function showSuccessModal(data) {
+            const modal = document.getElementById('successModal');
+            const details = document.getElementById('modalDetails');
+            const messageText = document.getElementById('successMessageText');
+
+            messageText.textContent = `Thank you, ${data.name}! Your message has been received. We'll contact you soon.`;
+            
+            details.innerHTML = `
+                <p><strong>Reference #:</strong> MSG-${data.id}</p>
+                <p><strong>Issue Type:</strong> ${data.issueType}</p>
+                <p><strong>We'll contact you at:</strong></p>
+                <p>Phone: ${data.phone}</p>
+                <p>Email: ${data.email}</p>
+            `;
+
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSuccessModal() {
+            const modal = document.getElementById('successModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on overlay click
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSuccessModal();
+            }
         });
     </script>
 </body>

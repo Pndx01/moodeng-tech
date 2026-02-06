@@ -1,0 +1,8 @@
+# Enable RewriteEngine
+RewriteEngine On
+
+# Proxy /api requests to Node.js server on port 3000
+RewriteRule ^api/(.*)$ http://localhost:3000/api/$1 [P,L]
+
+# Handle uploads folder - proxy to Node.js
+RewriteRule ^uploads/(.*)$ http://localhost:3000/uploads/$1 [P,L]

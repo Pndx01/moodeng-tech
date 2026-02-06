@@ -96,93 +96,92 @@
             <h2 style="text-align: center; margin-bottom: 0.5rem;">Transparent Pricing</h2>
             <p style="text-align: center; color: #64748b; margin-bottom: 2rem;">No hidden fees, no surprises - just honest rates</p>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <!-- Hardware Repairs -->
+            <style>
+                @media (max-width: 768px) {
+                    .pricing-section table {
+                        font-size: 0.85rem;
+                    }
+                    .pricing-section th,
+                    .pricing-section td {
+                        padding: 0.5rem !important;
+                    }
+                }
+            </style>
+            
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <!-- Services Pricing Table -->
                 <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <h3 style="color: #1e40af; margin-bottom: 1rem;">Hardware Repairs</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>Screen Replacement</span>
-                            <strong>₱3,500 - ₱8,000</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>Keyboard Replacement</span>
-                            <strong>₱1,500 - ₱3,500</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>Battery Replacement</span>
-                            <strong>₱2,000 - ₱4,500</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>Charging Port Repair</span>
-                            <strong>₱800 - ₱2,000</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
-                            <span>Hinge Repair</span>
-                            <strong>₱1,200 - ₱3,000</strong>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Upgrades -->
-                <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <h3 style="color: #1e40af; margin-bottom: 1rem;">Upgrades</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>RAM Upgrade (8GB)</span>
-                            <strong>₱1,500 - ₱2,500</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>RAM Upgrade (16GB)</span>
-                            <strong>₱3,000 - ₱4,500</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>SSD Upgrade (256GB)</span>
-                            <strong>₱2,000 - ₱3,000</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>SSD Upgrade (512GB)</span>
-                            <strong>₱3,500 - ₱5,000</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
-                            <span>SSD Upgrade (1TB)</span>
-                            <strong>₱5,500 - ₱8,000</strong>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Software & Services -->
-                <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <h3 style="color: #1e40af; margin-bottom: 1rem;">Software & Services</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>OS Reinstallation</span>
-                            <strong>₱800 - ₱1,500</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>Virus Removal</span>
-                            <strong>₱500 - ₱1,200</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>Data Recovery (Basic)</span>
-                            <strong>₱1,500 - ₱3,000</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>Data Recovery (Advanced)</span>
-                            <strong>₱3,500 - ₱8,000</strong>
-                        </li>
-                        <li style="display: flex; justify-content: space-between; padding: 0.75rem 0;">
-                            <span>Preventive Maintenance</span>
-                            <strong>₱800 - ₱1,500</strong>
-                        </li>
-                    </ul>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #1e40af; color: white;">
+                                <th style="padding: 1rem; text-align: left; border: 1px solid #1e40af;">Service Category</th>
+                                <th style="padding: 1rem; text-align: left; border: 1px solid #1e40af;">Description</th>
+                                <th style="padding: 1rem; text-align: center; border: 1px solid #1e40af;">Price Range (Php)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #dbeafe;">
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Diagnostic Check</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">Initial laptop inspection and assessment</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>Free</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Software Repair</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">OS installation, virus removal, troubleshooting</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>500 - 1,500</strong></td>
+                            </tr>
+                            <tr style="background: #f8fafc;">
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Basic Cleaning</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">Internal cleaning, dust removal</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>500 - 800</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Keyboard Repair</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">Keyboard replacement or repair</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>2,000 - 4,000</strong></td>
+                            </tr>
+                            <tr style="background: #f8fafc;">
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Battery Replacement</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">Battery replacement (labor only, parts separate)</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>1,000 - 3,000</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Screen Replacement</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">LCD/LED replacement (labor only)</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>1,500 - 4,000</strong></td>
+                            </tr>
+                            <tr style="background: #f8fafc;">
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Hardware Repair</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">Motherboard, ports, cooling system</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>1,300 - 5,000</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Performance Upgrade</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">RAM or SSD installation (labor only)</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>800 - 2,000</strong></td>
+                            </tr>
+                            <tr style="background: #f8fafc;">
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Thermal Repasting</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">Cooling optimization, thermal paste</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>600 - 1,200</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Data Backup/Transfer</strong></td>
+                                <td style="padding: 1rem; border: 1px solid #e2e8f0;">Data migration services</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid #e2e8f0;"><strong>500 - 1,500</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: #e0f2fe; border-radius: 12px;">
                 <p style="margin: 0; color: #0369a1;"><strong>Student Discount:</strong> Show your valid student ID and get <strong>10-15% off</strong> on all services!</p>
             </div>
-            <p style="text-align: center; color: #64748b; margin-top: 1rem; font-size: 0.9rem;">* Prices may vary depending on laptop brand/model and parts availability. Final quote provided after diagnosis.</p>
+            <p style="text-align: center; color: #64748b; margin-top: 1rem; font-size: 0.9rem;">
+                <strong>Note:</strong> Prices shown are labor charges. Parts and components are priced separately based on brand, model, and availability.<br>
+                * Final quote provided after free diagnostic check.
+            </p>
         </div>
     </section>
 
